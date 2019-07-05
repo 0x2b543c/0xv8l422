@@ -7,19 +7,7 @@ from collections import namedtuple, defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
 from statistics import median, StatisticsError
-
-
-def quantify(seq, pred=None):
-    "Count how many times the predicate is true in the sequence"
-    return sum(map(pred, seq))
-
-# https://stackoverflow.com/questions/25470844/specify-format-for-input-arguments-argparse-python
-def valid_date(s):
-    try:
-        return datetime.strptime(s, "%Y-%m-%d")
-    except ValueError:
-        msg = "Not a valid date: '{0}'.".format(s)
-        raise argparse.ArgumentTypeError(msg)
+from utils import valid_date, quantify
 
 
 parser = argparse.ArgumentParser(description='Process KIN transfers.')
