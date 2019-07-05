@@ -6,6 +6,7 @@ from psycopg2.extras import NamedTupleCursor
 from collections import namedtuple, defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
+from statistics import median, StatisticsError
 
 
 def quantify(seq, pred=None):
@@ -72,7 +73,7 @@ def adjusted_volume(transfers: List[Transfer]) -> Decimal:
 if __name__ == "__main__":
     args = parser.parse_args()
     # Print header
-    print("Day\tKIN2Creations\tKIN3Creations\tKIN2Payments\tKIN3Payments\tKIN2Volume\tKIN3Volume\tKIN2AdjVolume\tKIN3AdjVolume")
+    print("Day\tKIN2Creations\tKIN3Creations\tKIN2Payments\tKIN3Payments\tKIN2Volume\tKIN3Volume\tKIN2AdjVolume\tKIN3AdjVolume\tKIN2MedianPayment\tKIN3MedianPayment")
     current_date = args.start
     with psycopg2.connect("postgresql://postgres@{}:{}/postgres2".format(args.host, args.port)) as conn:
         while current_date <= args.end:
@@ -89,7 +90,17 @@ if __name__ == "__main__":
             kin2_adjvolume = adjusted_volume([t for t in transfers if t.chain == 'kin2'])
             kin3_adjvolume = adjusted_volume([t for t in transfers if t.chain == 'kin3'])
 
-            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
+            try:
+                kin2_median_payment = median([t.value for t in transfers if t.chain == 'kin2' and t.type == 'PAYMENT'])
+            except StatisticsError:
+                kin2_median_payment = ""
+
+            try:
+                kin3_median_payment = median([t.value for t in transfers if t.chain == 'kin3' and t.type == 'PAYMENT'])
+            except StatisticsError:
+                kin3_median_payment = ""
+
+            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(
                 current_date.date(), 
                 kin2_creations, 
                 kin3_creations, 
@@ -98,7 +109,9 @@ if __name__ == "__main__":
                 kin2_volume,
                 kin3_volume,
                 kin2_adjvolume,
-                kin3_adjvolume
+                kin3_adjvolume,
+                kin2_median_payment,
+                kin3_median_payment
             ))
 
             current_date += timedelta(days=1)
