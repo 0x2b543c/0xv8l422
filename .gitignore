@@ -1,0 +1,10 @@
+__pycache__
+.vscode
+*.xlsx
+*.csv
+*.bin
+*.json
+*.DS_Store
+*.zip
+*.pkl
+*.pyc
