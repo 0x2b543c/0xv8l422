@@ -8,3 +8,7 @@ __pycache__
 *.zip
 *.pkl
 *.pyc
+
+.workspace
+.pytest_cache
+.ipynb_checkpoints
