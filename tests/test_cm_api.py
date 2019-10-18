@@ -17,28 +17,6 @@ def test_call_coinmetrics_api():
     dummy_result = {'metricData': {'metrics': ['AdrActCnt', 'CapRealUSD', 'TxCnt'], 'series': [{'time': '2017-01-01T00:00:00.000Z', 'values': ['13946.0', '734673672.319139817831833516177060007323674', '38730.0']}, {'time': '2017-01-02T00:00:00.000Z', 'values': ['15232.0', '736035521.072371336253635824094185064179384', '39652.0']}, {'time': '2017-01-03T00:00:00.000Z', 'values': ['14868.0', '741146428.959793620825964110400677939075684', '45883.0']}, {'time': '2017-01-04T00:00:00.000Z', 'values': ['18066.0', '749721286.811463913996829494293959461077514', '50673.0']}, {'time': '2017-01-05T00:00:00.000Z', 'values': ['18850.0', '748266829.167562703036783836603937695508484', '49596.0']}]}}
     assert dummy_result == result
 
-def test_get_coinmetrics_network_data():
-    testObj = cm.CM_API()
-    result = testObj.get_coinmetrics_network_data(api_key='mlR99PGlp1PpNiMYxcG0', asset='eth', metrics='AdrActCnt,CapRealUSD,TxCnt', start='2017-01-01', end='2017-01-05')
-    dummy_result = pd.DataFrame([
-        ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
-        ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
-    assert dummy_result.equals(result)
-
-def test_convert_coinmetrics_JSON_response_to_df():
-    testObj = cm.CM_API()
-    test_params = {
-        'metrics': 'AdrActCnt,CapRealUSD,TxCnt',
-        'start': '2017-01-01',
-        'end': '2017-01-05'
-    }
-    res = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/assets/eth/metricdata', params = test_params)
-    result = testObj.convert_coinmetrics_network_data_JSON_to_df(res)
-    dummy_result = pd.DataFrame([
-        ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
-        ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
-    assert dummy_result.equals(result)
-
 def test_call_coinmetrics_api_trades_endpoint():
     testObj = cm.CM_API()
     test_params = {
@@ -142,19 +120,128 @@ def test_call_coinmetrics_api_trades_endpoint():
     }
     assert dummy_result == result
 
-
-
-def test_get_coinmetrics_trades_data():
+def test_call_coinmetrics_api_candles_endpoint():
     testObj = cm.CM_API()
     test_params = {
         'reference_time': '2019-01-01',
         'limit': 10
     }
-    result = testObj.get_coinmetrics_trades_data(api_key='mlR99PGlp1PpNiMYxcG0', market_id='coinbase-btc-usd-spot', reference_time='2019-01-01', limit= 10)
-    dummy_response = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/markets/coinbase-btc-usd-spot/trades', params = test_params)
-    column_headers = dummy_response['tradesData'][0].keys()
-    dummy_result = pd.DataFrame(dummy_response['tradesData'], columns=column_headers)
-    assert dummy_result.equals(result)
+    result = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/markets/coinbase-btc-usd-spot/candles', params = test_params)
+    dummy_result = {
+        "candlesData": [
+            {
+                "time": "2019-01-01T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "3692.31",
+                "priceHigh": "3841.17",
+                "priceLow": "3651.02",
+                "priceClose": "3826.1",
+                "vwap": "3711.46315827099",
+                "volume": "10812.88498825",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-02T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "3826.1",
+                "priceHigh": "3916.57",
+                "priceLow": "3770.07",
+                "priceClose": "3890.79",
+                "vwap": "3837.59284193891",
+                "volume": "9982.47084577",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-03T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "3890.8",
+                "priceHigh": "3893.8",
+                "priceLow": "3758.07",
+                "priceClose": "3786.67",
+                "vwap": "3826.01132353795",
+                "volume": "9327.64708895",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-04T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "3787.57",
+                "priceHigh": "3849.0",
+                "priceLow": "3730.0",
+                "priceClose": "3820.82",
+                "vwap": "3784.80476707302",
+                "volume": "9225.1505004",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-05T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "3820.82",
+                "priceHigh": "3874.12",
+                "priceLow": "3775.0",
+                "priceClose": "3798.62",
+                "vwap": "3833.51802737287",
+                "volume": "6451.00775001",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-06T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "3799.99",
+                "priceHigh": "4088.0",
+                "priceLow": "3756.01",
+                "priceClose": "4040.99",
+                "vwap": "3958.41384035492",
+                "volume": "10057.45367318",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-07T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "4040.98",
+                "priceHigh": "4070.0",
+                "priceLow": "3968.79",
+                "priceClose": "4006.01",
+                "vwap": "4019.42512905279",
+                "volume": "9973.66538481",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-08T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "4005.97",
+                "priceHigh": "4114.8",
+                "priceLow": "3943.36",
+                "priceClose": "3993.86",
+                "vwap": "4016.1668631788",
+                "volume": "13959.39645383",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-09T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "3993.85",
+                "priceHigh": "4042.2",
+                "priceLow": "3962.12",
+                "priceClose": "4004.12",
+                "vwap": "4007.75789889434",
+                "volume": "10704.12810583",
+                "duration": "1 day"
+            },
+            {
+                "time": "2019-01-10T00:00:00.000000Z",
+                "marketId": "coinbase-btc-usd-spot",
+                "priceOpen": "4004.13",
+                "priceHigh": "4035.21",
+                "priceLow": "3560.0",
+                "priceClose": "3626.07",
+                "vwap": "3754.74987721677",
+                "volume": "21869.18380217",
+                "duration": "1 day"
+            }
+        ]
+    }
+    assert dummy_result == result
 
 def test_call_coinmetrics_realtime_network_data_endpoint():
     testObj = cm.CM_API()
@@ -225,6 +312,52 @@ def test_call_coinmetrics_realtime_network_data_endpoint():
         }
     }
     assert dummy_result == result
+
+def test_convert_coinmetrics_network_data_JSON_to_df():
+    testObj = cm.CM_API()
+    test_params = {
+        'metrics': 'AdrActCnt,CapRealUSD,TxCnt',
+        'start': '2017-01-01',
+        'end': '2017-01-05'
+    }
+    res = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/assets/eth/metricdata', params = test_params)
+    result = testObj.convert_coinmetrics_network_data_JSON_to_df(res)
+    dummy_result = pd.DataFrame([
+        ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
+        ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
+    assert dummy_result.equals(result)
+
+def test_get_coinmetrics_network_data():
+    testObj = cm.CM_API()
+    result = testObj.get_coinmetrics_network_data(api_key='mlR99PGlp1PpNiMYxcG0', asset='eth', metrics='AdrActCnt,CapRealUSD,TxCnt', start='2017-01-01', end='2017-01-05')
+    dummy_result = pd.DataFrame([
+        ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
+        ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
+    assert dummy_result.equals(result)
+
+def test_get_coinmetrics_trades_data():
+    testObj = cm.CM_API()
+    test_params = {
+        'reference_time': '2019-01-01',
+        'limit': 10
+    }
+    result = testObj.get_coinmetrics_trades_data(api_key='mlR99PGlp1PpNiMYxcG0', market_id='coinbase-btc-usd-spot', reference_time='2019-01-01', limit= 10)
+    dummy_response = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/markets/coinbase-btc-usd-spot/trades', params = test_params)
+    column_headers = dummy_response['tradesData'][0].keys()
+    dummy_result = pd.DataFrame(dummy_response['tradesData'], columns=column_headers)
+    assert dummy_result.equals(result)
+
+def test_get_coinmetrics_candles_data():
+    testObj = cm.CM_API()
+    test_params = {
+        'reference_time': '2019-01-01',
+        'limit': 10
+    }
+    result = testObj.get_coinmetrics_candles_data(api_key='mlR99PGlp1PpNiMYxcG0', market_id='coinbase-btc-usd-spot', reference_time='2019-01-01', limit= 10)
+    dummy_response = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/markets/coinbase-btc-usd-spot/candles', params = test_params)
+    column_headers = dummy_response['candlesData'][0].keys()
+    dummy_result = pd.DataFrame(dummy_response['candlesData'], columns=column_headers)
+    assert dummy_result.equals(result)
 
 def test_get_realtime_network_data():
     testObj = cm.CM_API()
