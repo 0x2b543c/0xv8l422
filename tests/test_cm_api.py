@@ -15,7 +15,6 @@ def test_call_coinmetrics_api():
     }
     result = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/assets/eth/metricdata', params = test_params)
     dummy_result = {'metricData': {'metrics': ['AdrActCnt', 'CapRealUSD', 'TxCnt'], 'series': [{'time': '2017-01-01T00:00:00.000Z', 'values': ['13946.0', '734673672.319139817831833516177060007323674', '38730.0']}, {'time': '2017-01-02T00:00:00.000Z', 'values': ['15232.0', '736035521.072371336253635824094185064179384', '39652.0']}, {'time': '2017-01-03T00:00:00.000Z', 'values': ['14868.0', '741146428.959793620825964110400677939075684', '45883.0']}, {'time': '2017-01-04T00:00:00.000Z', 'values': ['18066.0', '749721286.811463913996829494293959461077514', '50673.0']}, {'time': '2017-01-05T00:00:00.000Z', 'values': ['18850.0', '748266829.167562703036783836603937695508484', '49596.0']}]}}
-    print('TEST RESULT', result)
     assert dummy_result == result
 
 def test_get_coinmetrics_network_data():
@@ -24,7 +23,6 @@ def test_get_coinmetrics_network_data():
     dummy_result = pd.DataFrame([
         ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
         ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
-    print('TEST RESULT', result)
     assert dummy_result.equals(result)
 
 def test_convert_coinmetrics_JSON_response_to_df():
@@ -39,7 +37,6 @@ def test_convert_coinmetrics_JSON_response_to_df():
     dummy_result = pd.DataFrame([
         ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
         ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
-    print('TEST RESULT', result)
     assert dummy_result.equals(result)
 
 def test_call_coinmetrics_api_trades_endpoint():
@@ -143,7 +140,6 @@ def test_call_coinmetrics_api_trades_endpoint():
             }
         ]
     }
-    print('TEST RESULT', result)
     assert dummy_result == result
 
 
@@ -158,7 +154,6 @@ def test_get_coinmetrics_trades_data():
     dummy_response = testObj.call_coinmetrics_api(api_key='mlR99PGlp1PpNiMYxcG0', url='https://api.coinmetrics.io/v3/markets/coinbase-btc-usd-spot/trades', params = test_params)
     column_headers = dummy_response['tradesData'][0].keys()
     dummy_result = pd.DataFrame(dummy_response['tradesData'], columns=column_headers)
-    print('TEST RESULT', result)
     assert dummy_result.equals(result)
 
 def test_call_coinmetrics_realtime_network_data_endpoint():
@@ -229,7 +224,6 @@ def test_call_coinmetrics_realtime_network_data_endpoint():
             ]
         }
     }
-    print('TEST RESULT', result)
     assert dummy_result == result
 
 def test_get_realtime_network_data():
@@ -248,7 +242,6 @@ def test_get_realtime_network_data():
     dummy_result = pd.DataFrame(flattened_dummy_data, columns=column_headers)
 
     result = testObj.get_coinmetrics_realtime_network_data(api_key='ZHDJLW1WxLD8ttzW27am', asset_id='eth', metrics='AdrActRecCnt,AdrActCnt', reference_time='2019-01-01', limit= 5)
-    print('TEST RESULT', result)
     assert dummy_result.equals(result)
 
 
