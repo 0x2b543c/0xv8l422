@@ -45,7 +45,6 @@ class CM_API():
         df = pd.DataFrame(series, columns=column_headers)
         return df
 
-
     def get_coinmetrics_network_data(self, api_key:str, asset:str, metrics:str, start:str=None, end:str=None):
         url = 'https://api.coinmetrics.io/v3/assets/{}/metricdata'.format(asset)
         params = {
