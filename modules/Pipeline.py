@@ -28,7 +28,7 @@ class Pipeline():
     def print_transformers(self):
         print('TRANSFORMERS', self.transformers)
 
-    def render_visuaalizations(self):
+    def render_visualizations(self):
         for visualization in self.visualizations:
             visualization.render_visualization(self.df)
 

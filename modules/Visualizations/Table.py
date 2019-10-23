@@ -12,13 +12,13 @@ class Table(Vis):
         fig = go.Figure(data=[go.Table(
             header={
                 'values': self.table_headers,
-                'fill_color': 'turquoise',
+                'fill_color': 'skyblue',
                 'align': 'left'
             },
             cells={
                 'values': [df[column] for column in self.table_columns],
-                'fill_color': 'lavendar',
+                'fill_color': 'snow',
                 'align': 'left'
             }
-        ])
+        )])
         return fig
