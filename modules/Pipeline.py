@@ -14,14 +14,19 @@ class Pipeline():
 
     def load_transformers(self, transformers:list):
         print('TRANSFORMERS', self.transformers)
-        self.transformers = transformers
+        for transformer in transformers:
+            self.transformers.append(transformer)
 
     def execute_transformers(self):
+        print(self.transformers)
         for transformer in self.transformers:
             self.df = transformer.transform(self.df)
 
     def load_charts(self, charts:list):
         self.charts = charts
+
+    def print_transformers(self):
+        print('TRANSFORMERS', self.transformers)
 
     def render_charts(self):
         for chart in self.charts:

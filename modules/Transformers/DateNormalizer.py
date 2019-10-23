@@ -6,8 +6,9 @@ class DateNormalizer(tabc):
         self.input_column = input_column
 
     def say_hello(self):
-        print('hello')
+        print('goodbye')
 
     def implement_transformation(self, df):
         df[self.input_column] = pd.to_datetime(df[self.input_column]).dt.strftime('%Y-%m-%d')
+        print('uhhh')
         return df
