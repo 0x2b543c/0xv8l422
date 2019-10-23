@@ -4,7 +4,7 @@ class Pipeline():
     def __init__(self, df=None):
        self.df = pd.DataFrame() if df == None else df
        self.transformers = []
-       self.charts = []
+       self.visualizations = []
 
     def load_data(self, df):
         self.df = df
@@ -22,21 +22,21 @@ class Pipeline():
         for transformer in self.transformers:
             self.df = transformer.transform(self.df)
 
-    def load_charts(self, charts:list):
-        self.charts = charts
+    def load_visualizations(self, visualizations:list):
+        self.visualizations = visualizations
 
     def print_transformers(self):
         print('TRANSFORMERS', self.transformers)
 
-    def render_charts(self):
-        for chart in self.charts:
-            chart.render_visualization(self.df)
+    def render_visuaalizations(self):
+        for visualization in self.visualizations:
+            visualization.render_visualization(self.df)
 
-    def export_charts(self, export_type:str):
+    def export_visualizations(self, export_type:str):
         if export_type == 'png':
-            for chart in self.charts:
+            for visualization in self.visualizations:
                 pass
-            chart.export_as_png(df=self.df, file_name=chart.chart_title)
+            visualization.export_as_png(df=self.df, file_name=visualization.title)
         else: 
             print('Incorrect export type')
             pass 
