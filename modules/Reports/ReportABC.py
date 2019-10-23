@@ -8,29 +8,23 @@ class Report(ABC):
        self.visualizations = visualizations
 
     @abstractmethod
-    def implement_report(self, df, export:bool=False):
-        self.load_data(df)
-        self.execute_transformers()
-        self.render_visualizations()
-        if export == True:
-            self.export_report_as_pngs()
-   
-    def load_data(self, df):
+    def load_transformers(self, transformers:list):
+        for transformer in transformers:
+            self.transformers.append(transformer)
+    
+    @abstractmethod
+    def load_visualizations(self, visualizations:list):
+        self.visualizations = visualizations
+    
+    def load_data(self):
         self.df = df
 
     def get_data(self):
         return self.df
 
-    def load_transformers(self, transformers:list):
-        for transformer in transformers:
-            self.transformers.append(transformer)
-
     def execute_transformers(self):
         for transformer in self.transformers:
             self.df = transformer.transform(self.df)
-
-    def load_visualizations(self, visualizations:list):
-        self.visualizations = visualizations
 
     def render_visualizations(self):
         for visualization in self.visualizations:
@@ -44,5 +38,7 @@ class Report(ABC):
             print('Incorrect export type')
 
     def run_report(self):
-        self.implement_report(self.df)
+        self.load_data(df)
+        self.execute_transformers()
+        self.render_visualizations()
 
