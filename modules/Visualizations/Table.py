@@ -1,14 +1,14 @@
-from .ChartABC import Chart as chart
+from .VisualizationABC import Visualization as Vis
 import pandas as pd
 import plotly.graph_objects as go
 
-class Table(chart):
+class Table(Vis):
     def __init__(self, table_title:str, y_axis_columns:[str], x_axis_column:str='time'):
         self.table_title = None
         self.y_axis_columns = y_axis_columns
         self.x_axis_column = x_axis_column
 
-    def create_table(self, df, table_headers:[str], table_columns:[str]):
+    def create_visualization(self, df, table_headers:[str], table_columns:[str]):
         fig = go.Figure(data=[go.Table(
             header={
                 'values': table_headers,

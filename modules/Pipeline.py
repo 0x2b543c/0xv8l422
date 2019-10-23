@@ -30,7 +30,7 @@ class Pipeline():
 
     def render_charts(self):
         for chart in self.charts:
-            chart.render_chart(self.df)
+            chart.render_visualization(self.df)
 
     def export_charts(self, export_type:str):
         if export_type == 'png':

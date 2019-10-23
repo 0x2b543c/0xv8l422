@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 
-class Chart(ABC):
+class Visualization(ABC):
     @abstractmethod
-    def create_chart(self, df):
+    def create_visualization(self, df):
         pass
 
-    def render_chart(self, df):
-        fig = self.create_chart(df)
+    def render_visualization(self, df):
+        fig = self.create_visualization(df)
         return fig.show()
 
     def export_as_png(self, df, file_name):
-        fig = self.create_chart(df)
+        fig = self.create_visualization(df)
         fig.write_image("{}.png".format(file_name))
 
