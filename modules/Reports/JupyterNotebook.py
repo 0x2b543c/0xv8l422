@@ -4,10 +4,8 @@ import plotly.graph_objects as go
 from IPython.nbformat import current as nbf
 
 class JupyterNotebook(Rep):
-    def __init__(self, chart_title:str, y_axis_columns:[str], x_axis_column:str='time'):
-        self.title = None
-        self.y_axis_columns = y_axis_columns
-        self.x_axis_column = x_axis_column
+    def __init__(self, report_title:str):
+        self.title = report_title
 
     def create_report(self, df):
         ####
