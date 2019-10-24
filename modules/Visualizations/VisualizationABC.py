@@ -2,14 +2,16 @@ from abc import ABC, abstractmethod
 
 class Visualization(ABC):
     @abstractmethod
-    def create_visualization(self, df):
+    def implement_visualization(self, df):
         pass
 
-    def render_visualization(self, df):
-        fig = self.create_visualization(df)
-        return fig.show()
+    def create_visualization(self, df):
+        fig = self.implement_visualization(df)
+        return fig
 
-    def export_as_png(self, df, file_name):
-        fig = self.create_visualization(df)
-        fig.write_image("{}.png".format(file_name))
+    # def export_as_png(self, df, file_name):
+    #     fig = self.implement_visualization(df)
+    #     file_path = "{}.png".format(file_name)
+    #     fig.write_image(file_path)
+    #     print('Exported to ' file_path)
 

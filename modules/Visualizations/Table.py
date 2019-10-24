@@ -8,7 +8,7 @@ class Table(Vis):
         self.table_headers = table_headers
         self.table_columns = table_columns
 
-    def create_visualization(self, df):
+    def implement_visualization(self, df):
         fig = go.Figure(data=[go.Table(
             header={
                 'values': self.table_headers,

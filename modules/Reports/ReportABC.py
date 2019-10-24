@@ -1,19 +1,26 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+from random import randint
 
 class Report(ABC):
     def __init__(self, report_title:str, pipelines=[]):
         self.title = report_title
         self.pipelines = pipelines
-        self.visualizations = []
+        self.report_output = {'dfs': [], 'visualizations': []}
 
     @abstractmethod
     def implement_report(self):
         pass
 
-    def export_report_as_pngs(self, export_type:str):
-        for visualization in self.visualizations:
-            visualization.export_as_png(df=self.df, file_name=visualization.title)
+    def render_report_visualizations(self):
+        for visualization in self.report_output['visualizations']:
+           visualization.show()
+
+    def export_report_as_pngs(self):
+        for visualization in self.report_output['visualizations']:
+            file_path = "{}.png".format('yrp' + str(randint(1, 1000000000)))
+            visualization.write_image(file_path)
+            print('Exported to ', file_path)
 
     def export_report_as_jupyter_notebook(self):
         ####
@@ -34,7 +41,7 @@ class Report(ABC):
         with open('my_notebook.ipynb', 'w') as f:
                 nbf.write(nb, f, 'ipynb')
 
-    def run_report(self, export_type):
+    def run_report(self):
         self.implement_report()
-        if export_type == 'png':
-            self.export_report_as_pngs()
+        # self.render_report_visualizations()
+        self.export_report_as_pngs()

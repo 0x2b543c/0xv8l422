@@ -6,6 +6,7 @@ class Pipeline(ABC):
        self.df = df
        self.transformers = transformers
        self.visualizations = visualizations
+       self.pipe_output = {'df': df, 'visualizations': []}
 
     @abstractmethod
     def implement_pipeline(self, df):
@@ -18,7 +19,7 @@ class Pipeline(ABC):
     def load_visualizations(self, visualizations:list):
         self.visualizations = visualizations
     
-    def load_data(self):
+    def load_data(self, df):
         self.df = df
 
     def get_data(self):
@@ -28,10 +29,11 @@ class Pipeline(ABC):
         for transformer in self.transformers:
             self.df = transformer.transform(self.df)
 
-    def render_visualizations(self):
+    def create_visualizations(self):
         for visualization in self.visualizations:
-            visualization.render_visualization(self.df)
+            self.pipe_output['visualizations'].append(visualization.create_visualization(self.df))
 
     def run_pipeline(self):
         self.implement_pipeline(self.df)
+        return self.pipe_output
 
