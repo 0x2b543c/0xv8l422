@@ -3,13 +3,11 @@ import pandas as pd
 import plotly.graph_objects as go
 
 class GenericReport(Rep):
-    def __init__(self, df, report_title:str, transformers:list=[], visualizations:list=[]):
-        super().__init__(report_title=report_title, transformers=transformers, visualizations=visualizations, df=df)
+    def __init__(self, df, report_title:str, pipelines:list=[]):
+        super().__init__(report_title=report_title, pipelines=pipelines, visualizations=visualizations, df=df)
 
-    def load_transformers(self, transformers:list):
-        for transformer in transformers:
-            self.transformers.append(transformer)
-    
-    def load_visualizations(self, visualizations:list):
-        self.visualizations = visualizations
+    def implement_report(self):
+        for pipeline in self.pipelines:
+            updated_visualizations = pipeline.run_pipeline()
+            self.visualizations =  self.visualizations + updated_visualizations
    

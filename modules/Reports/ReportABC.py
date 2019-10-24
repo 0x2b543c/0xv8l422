@@ -2,43 +2,39 @@ from abc import ABC, abstractmethod
 import pandas as pd
 
 class Report(ABC):
-    def __init__(self, df, report_title:str, transformers=[], visualizations=[]):
-       self.df = df
-       self.transformers = transformers
-       self.visualizations = visualizations
+    def __init__(self, report_title:str, pipelines=[]):
+        self.title = report_title
+        self.pipelines = pipelines
+        self.visualizations = []
 
     @abstractmethod
-    def load_transformers(self, transformers:list):
-        for transformer in transformers:
-            self.transformers.append(transformer)
-    
-    @abstractmethod
-    def load_visualizations(self, visualizations:list):
-        self.visualizations = visualizations
-    
-    def load_data(self):
-        self.df = df
+    def implement_report(self):
+        pass
 
-    def get_data(self):
-        return self.df
-
-    def execute_transformers(self):
-        for transformer in self.transformers:
-            self.df = transformer.transform(self.df)
-
-    def render_visualizations(self):
+    def export_report_as_pngs(self, export_type:str):
         for visualization in self.visualizations:
-            visualization.render_visualization(self.df)
+            visualization.export_as_png(df=self.df, file_name=visualization.title)
 
-    def export_report(self, export_type:str):
+    def export_report_as_jupyter_notebook(self):
+        ####
+        # sourced from: https://stackoverflow.com/questions/13614783/programmatically-add-cells-to-an-ipython-notebook-for-report-generation
+        ####
+        nb = nbf.new_notebook()
+        cells = []
+        
+        for var in my_list:
+            # Assume make_image() saves an image to file and returns the filename
+            image_file = make_image(var)
+            text = "Variable: %s\n![image](%s)" % (var, image_file)
+            cell = nbf.new_text_cell('markdown', text)
+            cells.append(cell)
+
+        nb['worksheets'].append(nbf.new_worksheet(cells=cells))
+
+        with open('my_notebook.ipynb', 'w') as f:
+                nbf.write(nb, f, 'ipynb')
+
+    def run_report(self, export_type):
+        self.implement_report()
         if export_type == 'png':
-            for visualization in self.visualizations:
-                visualization.export_as_png(df=self.df, file_name=visualization.title)
-        else: 
-            print('Incorrect export type')
-
-    def run_report(self):
-        self.load_data(df)
-        self.execute_transformers()
-        self.render_visualizations()
-
+            self.export_report_as_pngs()
