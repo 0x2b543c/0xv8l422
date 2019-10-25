@@ -2,16 +2,22 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import nbformat as nbf
 from random import randint
+from pathlib import Path
 
 
 class Report(ABC):
     def __init__(self, report_title:str, pipelines=[]):
         self.title = report_title
         self.pipelines = pipelines
+        self.jupyter_notebook_cells = None
         self.report_output = {'dfs': [], 'visuals': []}
 
     @abstractmethod
     def implement_plumbing(self):
+        pass
+
+    @abstractmethod
+    def set_jupyter_notebook_cells(self):
         pass
 
     def render_report_visualizations(self):
@@ -19,7 +25,6 @@ class Report(ABC):
            visual.fig.show()
 
     def export_report_as_pngs(self):
-        print(' REPORT NAME??', self.__class__.__name__)
         for visual in self.report_output['visuals']:
             file_path = "{}.png".format(visual.title)
             visual.fig.write_image(file_path)
@@ -27,22 +32,29 @@ class Report(ABC):
 
     def export_report_as_jupyter_notebook(self):
         ####
-        # sourced from: https://stackoverflow.com/questions/13614783/programmatically-add-cells-to-an-ipython-notebook-for-report-generation
+        # sourced from: https://nbviewer.jupyter.org/gist/fperez/9716279
+        # and
+        #  https://stackoverflow.com/questions/13614783/programmatically-add-cells-to-an-ipython-notebook-for-report-generation
         ####
-        nb = nbf.new_notebook()
-        cells = []
-        
-        for var in my_list:
-            # Assume make_image() saves an image to file and returns the filename
-            image_file = make_image(var)
-            text = "Variable: %s\n![image](%s)" % (var, image_file)
-            cell = nbf.new_text_cell('markdown', text)
-            cells.append(cell)
+        nb = nbf.v4.new_notebook()
+        text = """\
+        My first automatic Jupyter Notebook
+        This is an auto-generated notebook."""
 
-        nb['worksheets'].append(nbf.new_worksheet(cells=cells))
+        nb['cells'] = [
+            # nbf.v4.new_markdown_cell(text)
+        ]
+        self.set_jupyter_notebook_cells()
+        for cell in self.jupyter_notebook_cells:
+            new_cell = nbf.v4.new_code_cell(cell)
+            nb['cells'].append(new_cell)
 
-        with open('my_notebook.ipynb', 'w') as f:
-                nbf.write(nb, f, 'ipynb')
+        file_path = str(Path(__file__).parent.parent.parent) + '/notebooks/{}.ipynb'.format(self.title)
+        nbf.write(nb,file_path)
+
+    def load_pipelines(self, pipelines:list):
+        for pipeline in pipelines:
+            self.pipelines.append(pipeline)
 
     def update_report_outputs(self):
         for pipeline in self.pipelines:
@@ -50,7 +62,13 @@ class Report(ABC):
             self.report_output['visuals'] =  self.report_output['visuals'] + pipe_output.visuals
             self.report_output['dfs'].append(pipe_output.df)
 
-    def run_report(self):
+    def run_report(self, export_types:[str]):
         self.implement_plumbing()
         self.update_report_outputs()
-        self.export_report_as_pngs()
+        if 'figures' in export_types:
+            self.render_report_visualizations()
+        if 'pngs' in export_types:
+            self.export_report_as_pngs()
+        if 'notebook' in export_types:
+            self.export_report_as_jupyter_notebook()
+
