@@ -1,6 +1,4 @@
 from .ReportABC import Report as Rep
-import pandas as pd
-import plotly.graph_objects as go
 
 class GenericReport(Rep):
     def __init__(self, report_title:str, pipelines:list=[]):

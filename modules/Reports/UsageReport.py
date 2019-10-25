@@ -2,13 +2,9 @@ from .ReportABC import Report as Rep
 import pandas as pd
 import plotly.graph_objects as go
 
-class GenericReport(Rep):
-    def __init__(self, report_title:str, pipelines:list=[]):
-        super().__init__(report_title=report_title, pipelines=pipelines)
+class UsageReport(Rep):
+    def __init__(self, report_title:str):
+        super().__init__(report_title=report_title)
 
-    def implement_report(self):
-        print('GENERIC REPORT NAME??', self.__class__.__name__)
-        for pipeline in self.pipelines:
-            pipe_output = pipeline.run_pipeline()
-            self.report_output['visuals'] =  self.report_output['visuals'] + pipe_output.visuals
-            self.report_output['dfs'].append(pipe_output.df)
+    def implement_plumbing(self):
+        pass

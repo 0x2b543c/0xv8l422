@@ -9,7 +9,7 @@ class Pipeline(ABC):
        self.visuals = []
 
     @abstractmethod
-    def implement_pipeline(self, df):
+    def implement_pipeline_steps(self, df):
         pass
 
     def load_transformers(self, transformers:list):
@@ -34,6 +34,8 @@ class Pipeline(ABC):
             self.visuals.append(visualizer.create_visual(self.df))
 
     def run_pipeline(self):
-        self.implement_pipeline(self.df)
+        self.implement_pipeline_steps(self.df)
+        self.execute_transformers()
+        self.execute_visualizers()
         return self
 
