@@ -3,8 +3,8 @@ import pandas as pd
 import plotly.graph_objects as go
 
 class Table(Vis):
-    def __init__(self, table_title:str, table_headers:[str], table_columns:[str]):
-        self.title = table_title
+    def __init__(self, title:str, table_headers:[str], table_columns:[str]):
+        super().__init__(title=title)
         self.table_headers = table_headers
         self.table_columns = table_columns
 
@@ -21,4 +21,4 @@ class Table(Vis):
                 'align': 'left'
             }
         )])
-        return fig
+        self.visual = fig

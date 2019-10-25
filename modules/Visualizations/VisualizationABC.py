@@ -1,13 +1,17 @@
 from abc import ABC, abstractmethod
 
 class Visualization(ABC):
+    def __init__(self, title:str):
+        self.title = title
+        self.visual = None
+
     @abstractmethod
     def implement_visualization(self, df):
         pass
 
-    def create_visualization(self, df):
-        fig = self.implement_visualization(df)
-        return fig
+    def execute_visualization(self, df):
+        self.implement_visualization(df)
+        return self
 
     # def export_as_png(self, df, file_name):
     #     fig = self.implement_visualization(df)

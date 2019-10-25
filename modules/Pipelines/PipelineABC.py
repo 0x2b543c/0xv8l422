@@ -29,9 +29,9 @@ class Pipeline(ABC):
         for transformer in self.transformers:
             self.df = transformer.transform(self.df)
 
-    def create_visualizations(self):
+    def execute_visualizations(self):
         for visualization in self.visualizations:
-            self.pipe_output['visualizations'].append(visualization.create_visualization(self.df))
+            self.pipe_output['visualizations'].append(visualization.execute_visualization(self.df))
 
     def run_pipeline(self):
         self.implement_pipeline(self.df)

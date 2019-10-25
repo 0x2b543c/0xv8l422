@@ -9,5 +9,5 @@ class GenericPipeline(Pipe):
     def implement_pipeline(self, df):
         self.load_data(df)
         self.execute_transformers()
-        self.create_visualizations()
+        self.execute_visualizations()
    

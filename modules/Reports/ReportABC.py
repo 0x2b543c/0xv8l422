@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+from IPython.nbformat import current as nbf
 from random import randint
+
 
 class Report(ABC):
     def __init__(self, report_title:str, pipelines=[]):
