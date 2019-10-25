@@ -7,6 +7,7 @@ class GenericReport(Rep):
         super().__init__(report_title=report_title, pipelines=pipelines)
 
     def implement_report(self):
+        print('GENERIC REPORT NAME??', self.__class__.__name__)
         for pipeline in self.pipelines:
             pipe_output = pipeline.run_pipeline()
             self.report_output['visualizations'] =  self.report_output['visualizations'] + pipe_output['visualizations']

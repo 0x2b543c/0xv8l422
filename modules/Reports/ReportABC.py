@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import pandas as pd
-from IPython.nbformat import current as nbf
+import nbformat as nbf
 from random import randint
 
 
@@ -19,6 +19,7 @@ class Report(ABC):
            visualization.show()
 
     def export_report_as_pngs(self):
+        print('REPORT NAME??', self.__class__.__name__)
         for visualization in self.report_output['visualizations']:
             file_path = "{}.png".format('yrp' + str(randint(1, 1000000000)))
             visualization.write_image(file_path)
