@@ -6,7 +6,9 @@ class GenericReport(Rep):
     def __init__(self, report_title:str, pipelines:list=[]):
         super().__init__(report_title=report_title, pipelines=pipelines)
 
-    def implement_plumbing(self):
+    def implement_report(self):
         print('GENERIC REPORT NAME??', self.__class__.__name__)
-        pass
-   
+        for pipeline in self.pipelines:
+            pipe_output = pipeline.run_pipeline()
+            self.report_output['visuals'] =  self.report_output['visuals'] + pipe_output.visuals
+            self.report_output['dfs'].append(pipe_output.df)

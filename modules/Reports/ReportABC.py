@@ -11,7 +11,7 @@ class Report(ABC):
         self.report_output = {'dfs': [], 'visuals': []}
 
     @abstractmethod
-    def implement_report(self):
+    def implement_plumbing(self):
         pass
 
     def render_report_visualizations(self):
@@ -44,7 +44,13 @@ class Report(ABC):
         with open('my_notebook.ipynb', 'w') as f:
                 nbf.write(nb, f, 'ipynb')
 
+    def update_report_outputs(self):
+        for pipeline in self.pipelines:
+            pipe_output = pipeline.run_pipeline()
+            self.report_output['visuals'] =  self.report_output['visuals'] + pipe_output.visuals
+            self.report_output['dfs'].append(pipe_output.df)
+
     def run_report(self):
-        self.implement_report()
-        # self.render_report_visualizations()
+        self.implement_plumbing()
+        self.update_report_outputs()
         self.export_report_as_pngs()
