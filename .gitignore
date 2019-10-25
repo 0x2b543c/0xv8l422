@@ -8,6 +8,7 @@ __pycache__
 *.zip
 *.pkl
 *.pyc
+*.png
 
 .workspace
 .pytest_cache

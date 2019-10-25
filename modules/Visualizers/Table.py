@@ -1,4 +1,4 @@
-from .VisualizationABC import Visualization as Vis
+from .VisualizerABC import Visualizer as Vis
 import pandas as pd
 import plotly.graph_objects as go
 

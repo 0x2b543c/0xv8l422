@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Visualization(ABC):
+class Visualizer(ABC):
     def __init__(self, title:str):
         self.title = title
         self.fig = None
@@ -9,7 +9,7 @@ class Visualization(ABC):
     def implement_visualization(self, df):
         pass
 
-    def execute_visualization(self, df):
+    def create_visual(self, df):
         self.implement_visualization(df)
         return self
 

@@ -31,7 +31,7 @@ class Pipeline(ABC):
 
     def execute_visualizers(self):
         for visualizer in self.visualizers:
-            self.visuals.append(visualizer.execute_visualization(self.df))
+            self.visuals.append(visualizer.create_visual(self.df))
 
     def run_pipeline(self):
         self.implement_pipeline(self.df)

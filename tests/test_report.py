@@ -7,8 +7,8 @@ sys.path.append(dir_path)
 
 from modules.CM_API import CM_API as cm
 from modules.Transformers.DateNormalizer import DateNormalizer as dn
-from modules.Visualizations.LineChart import LineChart as lc
-from modules.Visualizations.Table import Table as tbl
+from modules.Visualizers.LineChart import LineChart as lc
+from modules.Visualizers.Table import Table as tbl
 from modules.Reports.GenericReport import GenericReport as gr
 from modules.Pipelines.GenericPipeline import GenericPipeline as gp
 
