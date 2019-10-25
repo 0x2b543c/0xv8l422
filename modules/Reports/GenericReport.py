@@ -10,6 +10,6 @@ class GenericReport(Rep):
         print('GENERIC REPORT NAME??', self.__class__.__name__)
         for pipeline in self.pipelines:
             pipe_output = pipeline.run_pipeline()
-            self.report_output['visualizations'] =  self.report_output['visualizations'] + pipe_output['visualizations']
-            self.report_output['dfs'].append(pipe_output['df'])
+            self.report_output['visuals'] =  self.report_output['visuals'] + pipe_output.visuals
+            self.report_output['dfs'].append(pipe_output.df)
    

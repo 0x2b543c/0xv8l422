@@ -21,4 +21,4 @@ class Table(Vis):
                 'align': 'left'
             }
         )])
-        self.visual = fig
+        self.fig = fig

@@ -19,9 +19,9 @@ def test_export_report_pngs():
     test_chart_2 = lc(title='test 2', y_axis_columns=['TxCnt'])
     test_table = tbl(title='test table', table_headers=['Active Addresses', 'Transaction Count'], table_columns=['AdrActCnt', 'TxCnt'])
     transformers=[dn()]
-    visualizations = [test_chart, test_chart_2, test_table]
+    visualizers = [test_chart, test_chart_2, test_table]
 
-    test_pipeline = gp(df=test_network_data, transformers=transformers, visualizations=visualizations)
+    test_pipeline = gp(df=test_network_data, transformers=transformers, visualizers=visualizers)
 
     test_report = gr(report_title='test report', pipelines=[test_pipeline])
     test_report.run_report()

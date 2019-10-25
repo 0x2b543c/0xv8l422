@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class Visualization(ABC):
     def __init__(self, title:str):
         self.title = title
-        self.visual = None
+        self.fig = None
 
     @abstractmethod
     def implement_visualization(self, df):

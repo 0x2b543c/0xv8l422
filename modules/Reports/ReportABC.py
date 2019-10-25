@@ -8,21 +8,21 @@ class Report(ABC):
     def __init__(self, report_title:str, pipelines=[]):
         self.title = report_title
         self.pipelines = pipelines
-        self.report_output = {'dfs': [], 'visualizations': []}
+        self.report_output = {'dfs': [], 'visuals': []}
 
     @abstractmethod
     def implement_report(self):
         pass
 
     def render_report_visualizations(self):
-        for visualization in self.report_output['visualizations']:
-           visualization.show()
+        for visual in self.report_output['visuals']:
+           visual.fig.show()
 
     def export_report_as_pngs(self):
-        print('REPORT NAME??', self.__class__.__name__)
-        for visualization in self.report_output['visualizations']:
-            file_path = "{}.png".format('yrp' + str(randint(1, 1000000000)))
-            visualization.write_image(file_path)
+        print(' REPORT NAME??', self.__class__.__name__)
+        for visual in self.report_output['visuals']:
+            file_path = "{}.png".format(visual.title)
+            visual.fig.write_image(file_path)
             print('Exported to ', file_path)
 
     def export_report_as_jupyter_notebook(self):
