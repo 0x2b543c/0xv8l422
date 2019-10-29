@@ -9,12 +9,17 @@ class Report(ABC):
     def __init__(self, report_title:str, pipelines=[]):
         self.title = report_title
         self.pipelines = pipelines
-        self.jupyter_notebook_cells = None
+        self.jupyter_notebook_cells = []
+        self.sections = []
         self.report_output = {'dfs': [], 'visuals': []}
 
     @abstractmethod
     def implement_plumbing(self):
         pass
+
+    def load_sections(self, sections:list):
+        for section in sections:
+            self.sections.append(pipeline)
 
     @abstractmethod
     def set_jupyter_notebook_cells(self):
@@ -30,6 +35,10 @@ class Report(ABC):
             visual.fig.write_image(file_path)
             print('Exported to ', file_path)
 
+    def reset_jupyter_notebook_cells(self):
+        self.jupyter_notebook_cells = []
+
+
     def export_report_as_jupyter_notebook(self):
         ####
         # sourced from: https://nbviewer.jupyter.org/gist/fperez/9716279
@@ -44,6 +53,7 @@ class Report(ABC):
         nb['cells'] = [
             # nbf.v4.new_markdown_cell(text)
         ]
+        self.reset_jupyter_notebook_cells()
         self.set_jupyter_notebook_cells()
         for cell in self.jupyter_notebook_cells:
             new_cell = nbf.v4.new_code_cell(cell)
@@ -56,7 +66,11 @@ class Report(ABC):
         for pipeline in pipelines:
             self.pipelines.append(pipeline)
 
-    def update_report_outputs(self):
+    def reset_report_output(self):
+        self.report_output = {'dfs': [], 'visuals': []}
+
+    def update_report_output(self):
+        self.reset_report_output()
         for pipeline in self.pipelines:
             pipe_output = pipeline.run_pipeline()
             self.report_output['visuals'] =  self.report_output['visuals'] + pipe_output.visuals
@@ -64,7 +78,7 @@ class Report(ABC):
 
     def run_report(self, export_types:[str]):
         self.implement_plumbing()
-        self.update_report_outputs()
+        self.update_report_output()
         if 'figures' in export_types:
             self.render_report_visualizations()
         if 'pngs' in export_types:

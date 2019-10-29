@@ -7,4 +7,5 @@ class GenericReport(Rep):
     def implement_plumbing(self):
         print('GENERIC REPORT NAME??', self.__class__.__name__)
         pass
+
    

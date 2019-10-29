@@ -33,7 +33,14 @@ class Pipeline(ABC):
         for visualizer in self.visualizers:
             self.visuals.append(visualizer.create_visual(self.df))
 
+    def reset_pipeline_output(self):
+        self.df = None
+        self.transformers = []
+        self.visualizers = []
+        self.visuals = []
+
     def run_pipeline(self):
+        self.reset_pipeline_output()
         self.implement_pipeline_steps()
         self.execute_transformers()
         self.execute_visualizers()
