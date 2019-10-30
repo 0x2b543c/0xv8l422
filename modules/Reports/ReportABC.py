@@ -38,7 +38,7 @@ class Report(ABC):
         #  https://stackoverflow.com/questions/13614783/programmatically-add-cells-to-an-ipython-notebook-for-report-generation
         ####
         nb = nbf.v4.new_notebook()
-        title_cell = "Note a new {report_title}".format(report_title=self.title)
+        title_cell = "{report_title}".format(report_title=self.title)
         code_cells = ["""\
             %matplotlib inline
             import sys

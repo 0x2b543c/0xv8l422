@@ -13,6 +13,7 @@ from modules.Reports.GenericReport import GenericReport as gr
 from modules.Pipelines.GenericPipeline import GenericPipeline as gp
 from modules.Reports.ValuationReport import ValuationReport
 from modules.Reports.ActivityReport import ActivityReport
+from modules.Reports.EconomicsReport import EconomicsReport
 
 
 def test_export_report_pngs():
@@ -28,12 +29,15 @@ def test_export_report_pngs():
     test_report = gr(report_title='test report', pipelines=[test_pipeline])
     test_report.run_report()
 
-@pytest.mark.curtest
 def test_valuation_report_jupyter_notebook():
     test_report = ValuationReport(report_title='Test Valuation Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='eth')
     test_report.run_report(export_types=['notebook'])
 
-@pytest.mark.curtest
 def test_activity_report_jupyter_notebook():
     test_report = ActivityReport(report_title='Test Activity Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='eth')
+    test_report.run_report(export_types=['notebook'])
+
+@pytest.mark.curtest
+def test_economics_report_jupyter_notebook():
+    test_report = EconomicsReport(report_title='Test Economics Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='eth')
     test_report.run_report(export_types=['notebook'])
