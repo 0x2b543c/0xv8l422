@@ -26,14 +26,14 @@ class ActivityReport(Rep):
             import sys
             sys.path.append('/workspace')
             from IPython.display import clear_output
-            from modules.Reports.NetworkDataIndividualLineChartsPipe import NetworkDataIndividualLineChartsPipe
+            from modules.Reports.ActivityReport import ActivityReport
             """,
             """\
             clear_output()
             api_key = 'KKzV6V2DTY87v3m1dGZu'
             asset = 'eth'
             report_title='Activity Report'
-            report = NetworkDataIndividualLineChartsPipe(report_title=report_title, api_key=api_key, asset=asset)
+            report = ActivityReport(report_title=report_title, api_key=api_key, asset=asset)
             report.run_report(export_types=['figures'])
             """
         ]

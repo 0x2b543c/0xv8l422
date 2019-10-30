@@ -11,11 +11,9 @@ class Visualizer(ABC):
 
     def create_visual(self, df):
         self.implement_visualization(df)
+        self.fig.update_layout(
+            title=self.title
+        )
         return self
 
-    # def export_as_png(self, df, file_name):
-    #     fig = self.implement_visualization(df)
-    #     file_path = "{}.png".format(file_name)
-    #     fig.write_image(file_path)
-    #     print('Exported to ' file_path)
 
