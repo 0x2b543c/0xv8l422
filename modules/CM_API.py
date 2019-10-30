@@ -45,16 +45,27 @@ class CM_API():
         df = pd.DataFrame(series, columns=column_headers)
         return df
 
-    def get_coinmetrics_network_data(self, api_key:str, asset:str, metrics:str, start:str=None, end:str=None):
-        url = 'https://api.coinmetrics.io/v3/assets/{}/metricdata'.format(asset)
-        params = {
-            'metrics': metrics,
-            'start': start,
-            'end': end
-        }      
-        result = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
-        df = self.convert_coinmetrics_network_data_JSON_to_df(result)     
-        return df
+    def concat_dataframes(self, dfs:list):
+        result = pd.DataFrame()
+        for df in dfs:
+            result = pd.concat([result, df], axis=1)
+        return result    
+
+    def get_coinmetrics_network_data(self, api_key:str, assets:[str], metrics:str, start:str=None, end:str=None):
+        result = pd.DataFrame()
+        for asset in assets:
+            url = 'https://api.coinmetrics.io/v3/assets/{}/metricdata'.format(asset)
+            params = {
+                'metrics': metrics,
+                'start': start,
+                'end': end
+            }      
+            response = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
+            df = self.convert_coinmetrics_network_data_JSON_to_df(response)
+            df.set_index('time', inplace=True)
+            df.columns = [asset + '.' + column for column in list(df.columns)]
+            result = self.concat_dataframes(dfs=[result, df])     
+        return result
 
     def get_coinmetrics_trades_data(self, api_key:str, market_id:str, reference_time:str=None, direction:str=None, limit:str=None, latest:bool=None):
         url = 'https://api.coinmetrics.io/v3/markets/{}/trades'.format(market_id)
