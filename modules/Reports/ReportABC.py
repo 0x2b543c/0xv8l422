@@ -9,7 +9,6 @@ class Report(ABC):
     def __init__(self, report_title:str, pipelines=[]):
         self.title = report_title
         self.pipelines = pipelines
-        self.jupyter_notebook_cells = []
         self.sections = []
         self.report_output = {'dfs': [], 'visuals': []}
 
@@ -21,10 +20,6 @@ class Report(ABC):
         for section in sections:
             self.sections.append(pipeline)
 
-    @abstractmethod
-    def set_jupyter_notebook_cells(self):
-        pass
-
     def render_report_visualizations(self):
         for visual in self.report_output['visuals']:
            visual.fig.show()
@@ -35,9 +30,6 @@ class Report(ABC):
             visual.fig.write_image(file_path)
             print('Exported to ', file_path)
 
-    def reset_jupyter_notebook_cells(self):
-        self.jupyter_notebook_cells = []
-
 
     def export_report_as_jupyter_notebook(self):
         ####
@@ -46,19 +38,26 @@ class Report(ABC):
         #  https://stackoverflow.com/questions/13614783/programmatically-add-cells-to-an-ipython-notebook-for-report-generation
         ####
         nb = nbf.v4.new_notebook()
-        text = """\
-        My first automatic Jupyter Notebook
-        This is an auto-generated notebook."""
-
-        nb['cells'] = [
-            # nbf.v4.new_markdown_cell(text)
+        title_cell = "Note a new {report_title}".format(report_title=self.title)
+        code_cells = ["""\
+            %matplotlib inline
+            import sys
+            sys.path.append('/workspace')
+            from IPython.display import clear_output
+            from modules.Reports.{class_name} import {class_name}
+            """.format(class_name=self.__class__.__name__),
+            """\
+            clear_output()
+            api_key = 'KKzV6V2DTY87v3m1dGZu'
+            asset = 'eth'
+            report_title='{report_title}'
+            report = {class_name}(report_title=report_title, api_key=api_key, asset=asset)
+            report.run_report(export_types=['figures'])
+            """.format(report_title=self.title, class_name=self.__class__.__name__)
         ]
-        self.reset_jupyter_notebook_cells()
-        self.set_jupyter_notebook_cells()
-        for cell in self.jupyter_notebook_cells:
-            new_cell = nbf.v4.new_code_cell(cell)
-            nb['cells'].append(new_cell)
 
+        nb['cells'] = [nbf.v4.new_markdown_cell(title_cell)] + [nbf.v4.new_code_cell(cell) for cell in code_cells]
+  
         file_path = str(Path(__file__).parent.parent.parent) + '/notebooks/{}.ipynb'.format(self.title)
         nbf.write(nb,file_path)
 

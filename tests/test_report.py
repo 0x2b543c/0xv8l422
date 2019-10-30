@@ -28,8 +28,9 @@ def test_export_report_pngs():
     test_report = gr(report_title='test report', pipelines=[test_pipeline])
     test_report.run_report()
 
+@pytest.mark.curtest
 def test_valuation_report_jupyter_notebook():
-    test_report = ValuationReport(report_title='Test Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='eth')
+    test_report = ValuationReport(report_title='Test Valuation Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='eth')
     test_report.run_report(export_types=['notebook'])
 
 @pytest.mark.curtest

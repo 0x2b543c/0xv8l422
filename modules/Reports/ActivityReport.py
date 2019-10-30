@@ -20,20 +20,3 @@ class ActivityReport(Rep):
             NetworkDataIndividualLineChartsPipe(api_key=self.api_key, asset=self.asset, metrics=activity_metrics)
         ])
         
-    def set_jupyter_notebook_cells(self):
-        self.jupyter_notebook_cells = ["""\
-            %matplotlib inline
-            import sys
-            sys.path.append('/workspace')
-            from IPython.display import clear_output
-            from modules.Reports.ActivityReport import ActivityReport
-            """,
-            """\
-            clear_output()
-            api_key = 'KKzV6V2DTY87v3m1dGZu'
-            asset = 'eth'
-            report_title='Activity Report'
-            report = ActivityReport(report_title=report_title, api_key=api_key, asset=asset)
-            report.run_report(export_types=['figures'])
-            """
-        ]
