@@ -48,15 +48,15 @@ class CM_API():
     def concat_dataframes(self, dfs:list):
         result = pd.DataFrame()
         for df in dfs:
-            result = pd.concat([result, df], axis=1)
+            result = pd.concat([result, df], axis=1, sort=True)
         return result    
 
-    def get_coinmetrics_network_data(self, api_key:str, assets:[str], metrics:str, start:str=None, end:str=None):
+    def get_coinmetrics_network_data(self, api_key:str, assets:[str], metrics:[str], start:str=None, end:str=None):
         result = pd.DataFrame()
         for asset in assets:
             url = 'https://api.coinmetrics.io/v3/assets/{}/metricdata'.format(asset)
             params = {
-                'metrics': metrics,
+                'metrics': ','.join(metrics),
                 'start': start,
                 'end': end
             }      

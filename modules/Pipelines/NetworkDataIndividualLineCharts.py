@@ -4,14 +4,14 @@ from ..Visualizers.LineChart import LineChart
 from ..CM_API import CM_API
 
 class NetworkDataIndividualLineChartsPipe(Pipe):
-    def __init__(self, api_key:str, asset:str, metrics:[str]):
+    def __init__(self, api_key:str, assets:[str], metrics:[str]):
         super().__init__()
         self.api_key = api_key
-        self.asset = asset
+        self.assets = assets
         self.metrics = metrics
         
     def implement_pipeline_steps(self):
-        df = CM_API().get_coinmetrics_network_data(api_key=self.api_key, asset=self.asset, metrics=','.join(self.metrics))
+        df = CM_API().get_coinmetrics_network_data(api_key=self.api_key, assets=self.assets, metrics=','.join(self.metrics))
         transformers = [
             DateNormalizer()
         ]

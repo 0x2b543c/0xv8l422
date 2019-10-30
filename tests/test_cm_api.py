@@ -328,13 +328,15 @@ def test_convert_coinmetrics_network_data_JSON_to_df():
         ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
     assert dummy_result.equals(result)
 
-@pytest.mark.curtest
 def test_get_coinmetrics_network_data():
     testObj = cm.CM_API()
-    result = testObj.get_coinmetrics_network_data(api_key='mlR99PGlp1PpNiMYxcG0', assets=['eth'], metrics='AdrActCnt,CapRealUSD,TxCnt', start='2017-01-01', end='2017-01-05')
+    result = testObj.get_coinmetrics_network_data(api_key='mlR99PGlp1PpNiMYxcG0', assets=['eth'], metrics=['AdrActCnt','CapRealUSD','TxCnt'], start='2017-01-01', end='2017-01-05')
     dummy_result = pd.DataFrame([
         ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
-        ], columns=['time', 'AdrActCnt', 'CapRealUSD', 'TxCnt'])
+        ], columns=['time', 'eth.AdrActCnt', 'eth.CapRealUSD', 'eth.TxCnt'])
+    dummy_result.set_index('time', inplace=True)
+    print('Expected result:', dummy_result)
+    print('Real result:', result)
     assert dummy_result.equals(result)
 
 def test_get_coinmetrics_trades_data():

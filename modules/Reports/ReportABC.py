@@ -49,9 +49,9 @@ class Report(ABC):
             """\
             clear_output()
             api_key = 'KKzV6V2DTY87v3m1dGZu'
-            asset = 'eth'
+            assets = ['btc', 'eth', 'ada']
             report_title='{report_title}'
-            report = {class_name}(report_title=report_title, api_key=api_key, asset=asset)
+            report = {class_name}(report_title=report_title, api_key=api_key, assets=assets)
             report.run_report(export_types=['figures'])
             """.format(report_title=self.title, class_name=self.__class__.__name__)
         ]

@@ -15,5 +15,5 @@ class LineChart(Vis):
         for column in self.y_axis_columns:
             fig.add_trace(go.Scatter(x=df.index if self.x_axis_column == 'index' else df[self.x_axis_column], y=df[column],
                                 mode='lines',
-                                name='lines'))
+                                name=column))
         self.fig = fig
