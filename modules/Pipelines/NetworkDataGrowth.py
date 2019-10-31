@@ -3,7 +3,7 @@ from ..Transformers.DateNormalizer import DateNormalizer
 from ..Transformers.CastToInts import CastToInts
 from ..Transformers.PercentGrowth import PercentGrowth
 from ..Visualizers.CompareMetricByAsset import CompareMetricByAsset
-from ..CM_API import CM_API
+from ..DataLoaders.CM_API import CM_API
 
 class NetworkDataGrowthPipe(Pipe):
     def __init__(self, api_key:str, assets:[str], metrics:[str], start:str=None, end:str=None):

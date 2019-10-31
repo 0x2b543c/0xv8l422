@@ -5,7 +5,7 @@ import pandas as pd
 dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
 sys.path.append(dir_path)
 
-from modules.CM_API import CM_API as cm
+from modules.DataLoaders.CM_API import CM_API as cm
 from modules.Transformers.DateNormalizer import DateNormalizer as dn
 from modules.Visualizers.LineChart import LineChart as lc
 from modules.Visualizers.Table import Table as tbl

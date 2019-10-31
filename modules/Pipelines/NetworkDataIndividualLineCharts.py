@@ -1,7 +1,7 @@
 from .PipelineABC import Pipeline as Pipe
 from ..Transformers.DateNormalizer import DateNormalizer
 from ..Visualizers.LineChart import LineChart
-from ..CM_API import CM_API
+from ..DataLoaders.CM_API import CM_API
 
 class NetworkDataIndividualLineChartsPipe(Pipe):
     def __init__(self, api_key:str, assets:[str], metrics:[str]):
