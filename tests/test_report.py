@@ -15,6 +15,7 @@ from modules.Reports.ValuationReport import ValuationReport
 from modules.Reports.ActivityReport import ActivityReport
 from modules.Reports.EconomicsReport import EconomicsReport
 from modules.Reports.NDPGrowthComparison import NDPGrowthComparison
+from modules.Reports.FlowsReport import FlowsReport
 
 
 def test_export_report_pngs():
@@ -42,7 +43,11 @@ def test_economics_report_jupyter_notebook():
     test_report = EconomicsReport(report_title='Test Economics Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='eth')
     test_report.run_report(export_types=['notebook'])
 
-@pytest.mark.curtest
 def test_network_data_growth_report_jupyter_notebook():
     test_report = NDPGrowthComparison(report_title='Test Growth Report', api_key='KKzV6V2DTY87v3m1dGZu', assets=['btc','eth','bch'], metrics=['AdrActCnt','CapRealUSD'])
+    test
+
+@pytest.mark.curtest
+def test_flows_report_jupyter_notebook():
+    test_report = FlowsReport(report_title='Test Flows Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='btc', currency_type='Ntv')
     test_report.run_report(export_types=['notebook'])

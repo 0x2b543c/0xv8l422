@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 import pandas as pd
 
 class Pipeline(ABC):
-    def __init__(self, df=None, transformers:list=[], visualizers:list=[]):
+    def __init__(self, df=None, transformers:list=[]):
        self.df = df
        self.transformers = transformers
-       self.visualizers = visualizers
+       self.visualizers = []
        self.visuals = []
 
     @abstractmethod
@@ -24,6 +24,9 @@ class Pipeline(ABC):
 
     def get_data(self):
         return self.df
+    
+    def get_visuals(self):
+        return self.visuals
 
     def execute_transformers(self):
         for transformer in self.transformers:
@@ -35,13 +38,12 @@ class Pipeline(ABC):
 
     def reset_pipeline_output(self):
         self.df = None
-        self.transformers = []
-        self.visualizers = []
         self.visuals = []
 
     def run_pipeline(self):
         self.reset_pipeline_output()
         self.implement_pipeline_steps()
         self.execute_transformers()
-        return self.df
+        self.execute_visualizers()
+        return self
 
