@@ -43,6 +43,5 @@ class Pipeline(ABC):
         self.reset_pipeline_output()
         self.implement_pipeline_steps()
         self.execute_transformers()
-        self.execute_visualizers()
-        return self
+        return self.df
 

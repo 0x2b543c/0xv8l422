@@ -1,7 +1,7 @@
 from .TransformerABC import Transformer as tabc
 import pandas as pd
 
-class CastToInts(tabc):
+class CastToFloats(tabc):
     def __init__(self, input_columns:['str']='all'):
         self.input_columns = input_columns
 
