@@ -1,3 +1,4 @@
+
 __pycache__
 .vscode
 *.xlsx
@@ -13,3 +14,6 @@ __pycache__
 .workspace
 .pytest_cache
 .ipynb_checkpoints
+
+venv/
+.ipynb_checkpoints/

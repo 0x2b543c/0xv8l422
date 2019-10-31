@@ -157,3 +157,5 @@ zipp==0.6.0
 ZODB==5.3.0
 zodbpickle==1.0
 zope.interface==4.4.3
+requests==2.22.0
+networkx==2.3
