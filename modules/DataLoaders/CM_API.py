@@ -46,8 +46,7 @@ class CM_API(DataLoader):
             'latest': latest
         }      
         result = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
-        df = self.convert_coinmetrics_market_data_JSON_to_df(result) 
-        print('CANDLES DF', df)      
+        df = self.convert_coinmetrics_market_data_JSON_to_df(result)    
         return df 
 
     def get_coinmetrics_realtime_network_data(self, api_key:str, asset_id:str, metrics:str, reference_time:str=None, reference_height:str=None, direction:str=None, limit:str=None):

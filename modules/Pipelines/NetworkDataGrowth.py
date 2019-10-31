@@ -2,7 +2,7 @@ from .PipelineABC import Pipeline as Pipe
 from ..Transformers.DateNormalizer import DateNormalizer
 from ..Transformers.CastToInts import CastToInts
 from ..Transformers.PercentGrowth import PercentGrowth
-from ..Visualizers.CompareMetricByAsset import CompareMetricByAsset
+from ..Visualizers.LineChartMetricByAssets import LineChartMetricByAssets
 from ..DataLoaders.CM_API import CM_API
 
 class NetworkDataGrowthPipe(Pipe):
@@ -21,7 +21,7 @@ class NetworkDataGrowthPipe(Pipe):
             CastToInts(),
             PercentGrowth()
         ]
-        visualizers = [CompareMetricByAsset(title=metric, metric=metric, assets=self.assets) for metric in self.metrics]
+        visualizers = [LineChartMetricByAssets(title=metric, metric=metric, assets=self.assets) for metric in self.metrics]
 
         self.load_data(df=df)
         self.load_transformers(transformers=transformers)

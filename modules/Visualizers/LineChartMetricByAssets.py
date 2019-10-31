@@ -2,7 +2,7 @@ from .VisualizerABC import Visualizer as Vis
 import pandas as pd
 import plotly.graph_objects as go
 
-class CompareMetricByAsset(Vis):
+class LineChartMetricByAssets(Vis):
     def __init__(self, title:str,  metric:str, assets:[str]='all',):
         super().__init__(title=title)
         self.metric = metric
