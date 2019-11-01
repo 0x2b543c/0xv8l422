@@ -47,7 +47,6 @@ def test_network_data_growth_report_jupyter_notebook():
     test_report = NDPGrowthComparison(report_title='Test Growth Report', api_key='KKzV6V2DTY87v3m1dGZu', assets=['btc','eth','bch'], metrics=['AdrActCnt','CapRealUSD'])
     test
 
-@pytest.mark.curtest
 def test_flows_report_jupyter_notebook():
     test_report = FlowsReport(report_title='Test Flows Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='btc', currency_type='Ntv')
     test_report.run_report(export_types=['notebook'])
