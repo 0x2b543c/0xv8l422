@@ -1,6 +1,6 @@
 from .PipelineABC import Pipeline as Pipe
 from ..Transformers.DateNormalizer import DateNormalizer
-from ..Transformers.CastToInts import CastToInts
+from ..Transformers.CastToFloats import CastToFloats
 from ..Transformers.PercentGrowth import PercentGrowth
 from ..Visualizers.LineChartMetricByAssets import LineChartMetricByAssets
 from ..DataLoaders.CM_API import CM_API
@@ -18,7 +18,7 @@ class NetworkDataGrowthPipe(Pipe):
         df = CM_API().get_coinmetrics_network_data(api_key=self.api_key, assets=self.assets, metrics=self.metrics, start=self.start, end=self.end)
         transformers = [
             DateNormalizer(),
-            CastToInts(),
+            CastToFloats(),
             PercentGrowth()
         ]
         visualizers = [LineChartMetricByAssets(title=metric, metric=metric, assets=self.assets) for metric in self.metrics]

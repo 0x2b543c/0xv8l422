@@ -6,26 +6,31 @@ from pathlib import Path
 
 
 class Report(ABC):
-    def __init__(self, report_title:str, pipelines=[]):
+    def __init__(self, report_title:str, api_key:str):
         self.title = report_title
-        self.pipelines = pipelines
+        self.api_key = api_key
         self.sections = []
-        self.report_output = {'dfs': [], 'visuals': []}
+        self.dfs = []
+        self.visuals = []
+
+    # @abstractmethod
+    # def implement_plumbing(self):
+    #     pass
 
     @abstractmethod
-    def implement_plumbing(self):
+    def implement_report_sections(self):
         pass
 
     def load_sections(self, sections:list):
         for section in sections:
-            self.sections.append(pipeline)
+            self.sections.append(section)
 
     def render_report_visualizations(self):
-        for visual in self.report_output['visuals']:
+        for visual in self.visuals:
            visual.fig.show()
 
     def export_report_as_pngs(self):
-        for visual in self.report_output['visuals']:
+        for visual in self.visuals:
             file_path = "{}.png".format(visual.title)
             visual.fig.write_image(file_path)
             print('Exported to ', file_path)
@@ -61,22 +66,23 @@ class Report(ABC):
         file_path = str(Path(__file__).parent.parent.parent) + '/notebooks/{}.ipynb'.format(self.title)
         nbf.write(nb,file_path)
 
-    def load_pipelines(self, pipelines:list):
-        for pipeline in pipelines:
-            self.pipelines.append(pipeline)
-
     def reset_report_output(self):
-        self.report_output = {'dfs': [], 'visuals': []}
+        self.dfs = []
+        self.visuals = []
 
     def update_report_output(self):
         self.reset_report_output()
-        for pipeline in self.pipelines:
-            pipe_output = pipeline.run_pipeline()
-            self.report_output['visuals'] =  self.report_output['visuals'] + pipe_output.visuals
-            self.report_output['dfs'].append(pipe_output.df)
+        for section in self.sections:
+            section.update_section()
+            for pipeline in section.pipelines:
+                pipe_output = pipeline.run_pipeline()
+                df = pipe_output.get_data()
+                visuals = pipe_output.get_visuals()
+                self.dfs.append(df)
+                self.visuals = self.visuals + visuals
 
     def run_report(self, export_types:[str]):
-        self.implement_plumbing()
+        self.implement_report_sections()
         self.update_report_output()
         if 'figures' in export_types:
             self.render_report_visualizations()
