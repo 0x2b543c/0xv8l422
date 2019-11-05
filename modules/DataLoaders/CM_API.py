@@ -8,10 +8,11 @@ class CM_API(DataLoader):
     def __init__(self):
         super().__init__()
 
-    def get_coinmetrics_network_data(self, api_key:str, assets:[str], metrics:[str], start:str=None, end:str=None):
+    def get_coinmetrics_network_data(self, api_key:str, assets:[str], metrics:[str], start:str=None, end:str=None, staging:bool=False):
         result = pd.DataFrame()
         for asset in assets:
-            url = 'https://api.coinmetrics.io/v3/assets/{}/metricdata'.format(asset)
+            url_prefix = 'staging-' if staging == True else ''
+            url = 'https://{url_prefix}api.coinmetrics.io/v3/assets/{asset}/metricdata'.format(url_prefix=url_prefix, asset=asset)
             params = {
                 'metrics': ','.join(metrics),
                 'start': start,
