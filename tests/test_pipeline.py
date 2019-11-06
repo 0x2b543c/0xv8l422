@@ -7,7 +7,6 @@ sys.path.append(dir_path)
 
 from modules.Pipelines.FlowsPipe import FlowsPipe
 
-@pytest.mark.curtest
 def test_flows_pipeline():
     api_key = 'KKzV6V2DTY87v3m1dGZu'
     exchanges = ['BMX']

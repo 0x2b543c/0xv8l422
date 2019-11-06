@@ -30,8 +30,10 @@ class Report(ABC):
            visual.fig.show()
 
     def export_report_as_pngs(self):
+
         for visual in self.visuals:
-            file_path = "{}.png".format(visual.title)
+            file_path = str(Path(__file__).parent.parent.parent) + '/pngs/{}.png'.format(visual.title)
+            # file_path = "/pngs/{}.png".format(visual.title)
             visual.fig.write_image(file_path)
             print('Exported to ', file_path)
 

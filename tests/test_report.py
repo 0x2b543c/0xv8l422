@@ -50,3 +50,13 @@ def test_network_data_growth_report_jupyter_notebook():
 def test_flows_report_jupyter_notebook():
     test_report = FlowsReport(report_title='Test Flows Report', api_key='KKzV6V2DTY87v3m1dGZu', asset='btc', currency_type='Ntv')
     test_report.run_report(export_types=['notebook'])
+
+@pytest.mark.curtest
+def test_flows_report_pngs():
+    api_key = 'KKzV6V2DTY87v3m1dGZu'
+    asset = 'btc'
+    percent_difference_threshold = .001
+    start = '2015-01-01'
+    report_title='BTC Staging Flows QC Report'
+    report = FlowsReport(report_title=report_title, api_key=api_key, assets=[asset], start=start, staging=True)
+    report.run_report(export_types=['pngs'])
