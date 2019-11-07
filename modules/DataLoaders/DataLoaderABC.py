@@ -18,6 +18,8 @@ class DataLoader(ABC):
         ### Sample response:
         # {'metricData': {'metrics': ['AdrActCnt', 'CapRealUSD', 'TxCnt'], 'series': [{'time': '2017-01-01T00:00:00.000Z', 'values': ['13946.0', '734673672.319139817831833516177060007323674', '38730.0']}, {'time': '2017-01-02T00:00:00.000Z', 'values': ['15232.0', '736035521.072371336253635824094185064179384', '39652.0']},
         ###
+        if 'metricData' not in list(response.keys()):
+            print('Network Data API Error', response['error']['description'])
         series = response['metricData']['series']
         column_headers = list(series[0].keys())[:-1] + response['metricData']['metrics']
         flattened_series = [list(row.values())[:-1] + row['values'] for row in series]

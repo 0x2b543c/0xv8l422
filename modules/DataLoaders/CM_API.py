@@ -19,6 +19,9 @@ class CM_API(DataLoader):
                 'end': end
             }      
             response = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
+            if 'error' in list(response.keys()):
+                error_message = response['error']['description']
+                print('Network Data API Error: {} for asset: {}'.format(error_message, asset))
             df = self.convert_coinmetrics_network_data_JSON_to_df(response)
             df.set_index('time', inplace=True)
             df.columns = [asset + '.' + column for column in list(df.columns)]
