@@ -14,4 +14,4 @@ class NetworkDataXDayAverage(tabc):
         df = pd.DataFrame({'asset':assets, 'metric':metrics, 'value':series.values})
         piv = df.pivot(index='metric', columns='asset', values='value')
         piv.reset_index(inplace=True)
-        return pivm
+        return piv

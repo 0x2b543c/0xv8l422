@@ -2,6 +2,7 @@ from .PipelineABC import Pipeline as Pipe
 from .NetworkDataPipe import NetworkDataPipe
 from ..Transformers.DateNormalizer import DateNormalizer
 from ..Transformers.CastToFloats import CastToFloats
+from ..Transformers.Divider import Divider
 from ..Transformers.ConcatDataframeHorizontally import ConcatDataframeHorizontally
 from ..Transformers.Aggregators.NetworkDataMetricsAggregator import NetworkDataMetricsAggregator
 from ..DataLoaders.CM_API import CM_API
@@ -12,7 +13,7 @@ class ERCsAggregatedPipe(Pipe):
         self.api_key = api_key
         self.ERC_stablecoins = ['dai', 'gusd', 'tusd', 'usdc', 'pax', 'usdt_eth']
         self.ERC_exchange_tokens = ['bnb', 'ht', 'leo_eth']
-        self.default_ERCs = ['ant', 'bat', 'cennz', 'ctxc', 'cvc', 'fun', 'link', 'loom','gno', 'gnt', 'icn', 'knc', 'lrc', 'mana', 'mkr', 'omg', 'pay', 'poly', 'powr', 'ppt', 'qash','rep', 'salt', 'srn', 'veri', 'wtc', 'zrx'] + self.ERC_stablecoins
+        self.default_ERCs = ['ant', 'bat', 'cennz', 'ctxc', 'cvc', 'fun', 'link', 'loom','gno', 'gnt', 'icn', 'knc', 'lrc', 'mana', 'mkr', 'omg', 'pay', 'poly', 'powr', 'ppt', 'qash','rep', 'salt', 'srn', 'veri', 'wtc', 'zrx'] + self.ERC_stablecoins + self.ERC_exchange_tokens
         self.default_metrics = ['AdrActCnt', 'AdrBal1in1BCnt','AdrBalUSD10Cnt','CapMrktCurUSD', 'CapRealUSD','IssTotNtv', 'TxCnt', 'TxTfrCnt', 'TxTfrValAdjUSD', 'VtyDayRet30d']
         self.ERCs = self.default_ERCs if ERCs == None else ERCs
         self.metrics = self.default_metrics if metrics == None else metrics
@@ -34,7 +35,10 @@ class ERCsAggregatedPipe(Pipe):
         if self.aggregate_ERCs == True:
             transformers = transformers + [
                 NetworkDataMetricsAggregator(aggregated_asset_name='ERC-20'),
-                ConcatDataframeHorizontally(df_to_concat=eth_df)
+                ConcatDataframeHorizontally(df_to_concat=eth_df),
+                Divider(column_a='eth.CapMrktCurUSD', column_b='ERC-20.CapMrktCurUSD'),
+                Divider(column_a='eth.CapRealUSD', column_b='ERC-20.CapRealUSD'),
+                Divider(column_a='eth.TxTfrValAdjUSD', column_b='ERC-20.TxTfrValAdjUSD')
             ]
 
         self.load_data(df=ercs_df)

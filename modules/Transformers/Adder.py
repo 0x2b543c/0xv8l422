@@ -2,8 +2,8 @@ from .TransformerABC import Transformer as tabc
 import pandas as pd
 
 class Adder(tabc):
-    def __init__(self, new_column_name:str, column_a:str, column_b:str, ):
-        self.new_column_name = new_column_name
+    def __init__(self, column_a:str, column_b:str, new_column_name:str=None):
+        self.new_column_name = column_a + ' + ' + column_b if new_column_name == None else new_column_name
         self.column_a = column_a
         self.column_b = column_b
 
