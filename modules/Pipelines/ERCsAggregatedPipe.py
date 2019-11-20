@@ -8,12 +8,12 @@ from ..Transformers.Aggregators.NetworkDataMetricsAggregator import NetworkDataM
 from ..DataLoaders.CM_API import CM_API
 
 class ERCsAggregatedPipe(Pipe):
-    def __init__(self, api_key:str, ERCs:[str]=None, metrics:[str]=None, start:str=None, end:str=None, staging:bool=False, aggregate_ERCs:bool=False):
+    def __init__(self, api_key:str, ERCs:[str]=None, metrics:[str]=None, start:str=None, end:str=None, staging:bool=False, aggregate_ERCs:bool=False, aggregated_assets_name:str='ERC-20'):
         super().__init__()
         self.api_key = api_key
         self.ERC_stablecoins = ['dai', 'gusd', 'tusd', 'usdc', 'pax', 'usdt_eth']
-        self.ERC_exchange_tokens = ['bnb', 'ht', 'leo_eth']
-        self.default_ERCs = ['ant', 'bat', 'cennz', 'ctxc', 'cvc', 'fun', 'link', 'loom','gno', 'gnt', 'icn', 'knc', 'lrc', 'mana', 'mkr', 'omg', 'pay', 'poly', 'powr', 'ppt', 'qash','rep', 'salt', 'srn', 'veri', 'wtc', 'zrx'] + self.ERC_stablecoins + self.ERC_exchange_tokens
+        self.ERC_exchange_tokens = ['bnb', 'ht', 'leo_eth', 'knc']
+        self.default_ERCs = ['ant', 'bat', 'cennz', 'ctxc', 'cvc', 'fun', 'link', 'loom','gno', 'gnt', 'icn', 'lrc', 'mana', 'mkr', 'omg', 'pay', 'poly', 'powr', 'ppt', 'qash','rep', 'salt', 'srn', 'wtc', 'zrx'] + self.ERC_stablecoins + self.ERC_exchange_tokens
         self.default_metrics = ['AdrActCnt', 'AdrBal1in1BCnt','AdrBalUSD10Cnt','CapMrktCurUSD', 'CapRealUSD','IssTotNtv', 'TxCnt', 'TxTfrCnt', 'TxTfrValAdjUSD', 'VtyDayRet30d']
         self.ERCs = self.default_ERCs if ERCs == None else ERCs
         self.metrics = self.default_metrics if metrics == None else metrics
@@ -21,6 +21,7 @@ class ERCsAggregatedPipe(Pipe):
         self.end = end
         self.staging = staging
         self.aggregate_ERCs = aggregate_ERCs
+        self.aggregate_assets_name = aggregated_assets_name
 
     def implement_pipeline_steps(self):
         ercs_df = CM_API().get_coinmetrics_network_data(api_key=self.api_key, assets=self.ERCs, metrics=self.metrics, start=self.start, end=self.end, staging=self.staging)
@@ -34,13 +35,15 @@ class ERCsAggregatedPipe(Pipe):
 
         if self.aggregate_ERCs == True:
             transformers = transformers + [
-                NetworkDataMetricsAggregator(aggregated_asset_name='ERC-20'),
+                NetworkDataMetricsAggregator(aggregated_asset_name=self.aggregate_assets_name),
                 ConcatDataframeHorizontally(df_to_concat=eth_df),
-                Divider(column_a='eth.CapMrktCurUSD', column_b='ERC-20.CapMrktCurUSD'),
-                Divider(column_a='eth.CapRealUSD', column_b='ERC-20.CapRealUSD'),
-                Divider(column_a='eth.TxTfrValAdjUSD', column_b='ERC-20.TxTfrValAdjUSD')
+                Divider(column_a='eth.CapMrktCurUSD', column_b=self.aggregate_assets_name + '.CapMrktCurUSD'),
+                Divider(column_a='eth.CapRealUSD', column_b=self.aggregate_assets_name + '.CapRealUSD'),
+                Divider(column_a='eth.TxTfrValAdjUSD', column_b=self.aggregate_assets_name + '.TxTfrValAdjUSD')
             ]
 
         self.load_data(df=ercs_df)
         self.load_transformers(transformers=transformers)
         
+
+    

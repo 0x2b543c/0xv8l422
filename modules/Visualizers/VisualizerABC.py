@@ -26,6 +26,9 @@ class Visualizer(ABC):
             xaxis = {
                 'showgrid' : False
             },
+            yaxis= {
+                'tickformat': ',.0%',
+            },
             paper_bgcolor = background_color,
             plot_bgcolor = background_color,
             legend= {
@@ -53,4 +56,4 @@ class Visualizer(ABC):
         )
         return self
 
-
+    

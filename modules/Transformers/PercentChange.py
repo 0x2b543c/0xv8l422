@@ -9,6 +9,6 @@ class PercentChange(tabc):
     def implement_transformation(self, df):
         if self.input_columns == 'all':
             result = df.pct_change(self.number_of_days)
-        # for column in 
-        # df[self.input_column] = pd.to_datetime(df[self.input_column]).dt.strftime('%Y-%m-%d')
+        for column in self.input_columns:
+            df[column] = df[column].pct_change(self.number_of_days)
         return result

@@ -12,7 +12,11 @@ class ETHContractsPipe(Pipe):
         self.assets = ['eth']
         self.start = start
         self.end = end
-        self.metrics = metrics = [   
+        self.metrics = metrics = [  
+            'GasUsedTx',
+            'GasUsedTxMean',
+            'GasLmtBlk',
+            'GasLmtTx', 
             'TxContCallCnt',
             'TxContCallSuccCnt',
             'TxContCnt',
@@ -37,6 +41,7 @@ class ETHContractsPipe(Pipe):
         transformers = [
             DateNormalizer(),
             CastToFloats(),
+            Divider(column_a='eth.GasUsedTx', column_b='eth.GasLmtBlk', new_column_name='Ethereum Block Fullness %'),
             Divider(column_a='eth.TxCnt', column_b='eth.TxERC20Cnt'),
             Divider(column_a='eth.TxCnt', column_b='eth.TxERC721Cnt'),
             Divider(column_a='eth.TxTfrCnt', column_b='eth.TxTfrERC20Cnt'),

@@ -66,6 +66,14 @@ class CM_API(DataLoader):
         df = self.convert_coinmetrics_network_data_JSON_to_df(result)     
         return df 
 
+    def get_coinmetrics_discovery_assets(self, api_key:str):
+        url = 'https://api.coinmetrics.io/v3/assets/'
+        params = {
+     
+        }      
+        result = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
+        return result 
+
 
 
 
