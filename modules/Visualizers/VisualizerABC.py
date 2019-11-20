@@ -1,17 +1,28 @@
 from abc import ABC, abstractmethod
 
 class Visualizer(ABC):
-    def __init__(self, title:str):
+    def __init__(self, _id:int, df, title:str, section:str=None, order:int=None, custom_formatting:str=None):
+        self.id = _id
+        self.df = df
         self.title = title
+        self.section = section
+        self.order = order
+        self.custom_formatting = custom_formatting
         self.fig = None
 
     @abstractmethod
-    def implement_visualization(self, df):
+    def implement(self, df):
         pass
 
-    def create_visual(self, df):
+    def show(self):
+        # TODO: Put in check for visual type (e.g. Plotly, Matplot, etc.)
+        return self.fig.show()
+
+    def export(self):
+        pass
+
+    def update_fig_layout(self):
         background_color = '#F5F5F5'
-        self.implement_visualization(df)
         self.fig.update_layout(
             title={
                 'text': self.title,
@@ -26,9 +37,9 @@ class Visualizer(ABC):
             xaxis = {
                 'showgrid' : False
             },
-            yaxis= {
-                'tickformat': ',.0%',
-            },
+            # yaxis= {
+            #     'tickformat': ',.0%',
+            # },
             paper_bgcolor = background_color,
             plot_bgcolor = background_color,
             legend= {
@@ -54,6 +65,11 @@ class Visualizer(ABC):
                 'yref': 'paper',
             }]
         )
+
+
+    def run(self):
+        self.implement()
+        self.update_fig_layout()
         return self
 
     

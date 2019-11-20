@@ -8,7 +8,7 @@ class MarketShareMetricsByAsset(Vis):
         self.asset = asset
         self.metrics = metrics
 
-    def implement_visualization(self, df):
+    def implement(self, df):
         fig = go.Figure()
         for metric in self.metrics:
             fig.add_trace(go.Scatter(x=df.index, y=df[self.asset + '.' + metric],

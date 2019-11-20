@@ -8,9 +8,9 @@ class LineChartAssetByMetrics(Vis):
         self.asset = asset
         self.metrics = metrics
 
-    def implement_visualization(self, df):
-        # if self.y_axis_columns == 'all':
-        #     self.y_axis_columns = list(df.columns)
+    def implement(self, df):
+        # if self.y_columns == 'all':
+        #     self.y_columns = list(df.columns)
         fig = go.Figure()
         for metric in self.metrics:
             fig.add_trace(go.Scatter(x=df.index, y=df[self.asset + '.' + metric],

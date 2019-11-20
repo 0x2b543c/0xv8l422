@@ -9,7 +9,7 @@ class StackedAreaChart(Vis):
         self.y2_axis_columns = y2_axis_columns
         self.x_column = x_column
 
-    def implement_visualization(self, df):
+    def implement(self, df):
         if self.y_columns == 'all':
             self.y_columns = list(df.columns)
         fig = go.Figure()

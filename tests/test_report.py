@@ -20,8 +20,8 @@ from modules.Reports.FlowsReport import FlowsReport
 
 def test_export_report_pngs():
     test_network_data = cm().get_coinmetrics_network_data(api_key='KKzV6V2DTY87v3m1dGZu', asset='eth', metrics='AdrActCnt,TxCnt', start='2019-01-01', end='2019-01-07')
-    test_chart = lc(title='test', y_axis_columns=['AdrActCnt'])
-    test_chart_2 = lc(title='test 2', y_axis_columns=['TxCnt'])
+    test_chart = lc(title='test', y_columns=['AdrActCnt'])
+    test_chart_2 = lc(title='test 2', y_columns=['TxCnt'])
     test_table = tbl(title='test table', table_headers=['Active Addresses', 'Transaction Count'], table_columns=['AdrActCnt', 'TxCnt'])
     transformers=[dn()]
     visualizers = [test_chart, test_chart_2, test_table]

@@ -40,6 +40,9 @@ DataLoader
 Transformer
 
 DataPipe
+    init()
+        self.data_sources
+        self.visuals
 
 DataSource(id:int, title:str, data_loader:[DataLoader or Pipeline])
 
@@ -58,4 +61,6 @@ Visual()
     implement()
     show()
         - show method should be able to detect the type of fig (e.g plotly, matlab, etc.) and show it accordingly
+    export()
+        - export method should be able to detect the type of fig (e.g plotly, matlab, etc.) and export it accordingly
     run()

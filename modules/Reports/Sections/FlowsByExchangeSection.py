@@ -27,15 +27,15 @@ class FlowsByExchange(Section):
 
         flow_visualizers = [LineChartAssetByMetrics(title=self.exchange + ' Exchange Inflow and Outflow ' + self.currency_type, asset=asset, metrics=flow_metrics) for asset in self.assets]
 
-        net_flow_visualizer = [LineChart(title=self.exchange + ' Net Flow ' + self.currency_type, y_axis_columns=[asset + '.' + self.exchange + 'NetFlow' + self.currency_type]) for asset in self.assets]
+        net_flow_visualizer = [LineChart(title=self.exchange + ' Net Flow ' + self.currency_type, y_columns=[asset + '.' + self.exchange + 'NetFlow' + self.currency_type]) for asset in self.assets]
         
         supply_visualizer = [LineChartAssetByMetrics(title=self.exchange + ' Exchange Supply ' + self.currency_type, asset=asset, metrics=supply_metrics) for asset in self.assets]
 
-        diff_sply_visualizer = [LineChart(title=self.exchange + ' Diff b/w Net Flow Sply and Sply ' + self.currency_type, y_axis_columns=[asset + '.' + self.exchange + 'DiffSplyNetFlow' + self.currency_type]) for asset in self.assets]
+        diff_sply_visualizer = [LineChart(title=self.exchange + ' Diff b/w Net Flow Sply and Sply ' + self.currency_type, y_columns=[asset + '.' + self.exchange + 'DiffSplyNetFlow' + self.currency_type]) for asset in self.assets]
 
-        percent_change_visualizers =[LineChart(title=self.exchange + ' Net Flow % Change vs Sply % Change ' + self.currency_type, y_axis_columns=[asset + '.' + self.exchange + 'NetFlowNtvPercentChange', asset + '.' + 'Sply' + self.exchange + 'NtvPercentChange']) for asset in self.assets]
+        percent_change_visualizers =[LineChart(title=self.exchange + ' Net Flow % Change vs Sply % Change ' + self.currency_type, y_columns=[asset + '.' + self.exchange + 'NetFlowNtvPercentChange', asset + '.' + 'Sply' + self.exchange + 'NtvPercentChange']) for asset in self.assets]
         
-        diff_net_flow_visualizer = [LineChart(title=self.exchange + ' (Sply % Change) - (Net Flow % Change) ' + self.currency_type, y_axis_columns=[asset + '.' + self.exchange + 'DiffPercentChangeSplyNetFlow' + self.currency_type]) for asset in self.assets]
+        diff_net_flow_visualizer = [LineChart(title=self.exchange + ' (Sply % Change) - (Net Flow % Change) ' + self.currency_type, y_columns=[asset + '.' + self.exchange + 'DiffPercentChangeSplyNetFlow' + self.currency_type]) for asset in self.assets]
 
 
 

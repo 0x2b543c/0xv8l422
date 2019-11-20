@@ -8,7 +8,7 @@ class LineChartERCsAggregateMetric(Vis):
         self.metric = metric
         self.add_eth = add_eth
 
-    def implement_visualization(self, df):
+    def implement(self, df):
         fig = go.Figure()
         erc_metric_name = 'ERC-20' + '.' + self.metric
         fig.add_trace(go.Scatter(x=df.index, y=df[erc_metric_name],
