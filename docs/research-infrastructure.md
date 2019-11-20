@@ -28,9 +28,9 @@ Report()
     combine_reports()
         - combine together multiple reports, i.e. mix and match different reports in a modular fashion
     render_visuals(sections:[int]='all')
-    exports_report_as_pngs(sections:[int]='all', export_path=str)
-    export_report_as_pdf(sections:[int]='all', export_path=str)
-    export_report_as_dash(sections:[int]='all', export_path=str)
+    exports_report_as_pngs(sections:[str]=None, export_path=str)
+    export_report_as_pdf(sections:[str]=None, export_path=str)
+    export_report_as_dash(sections:[str]=None, export_path=str)
     run()
 
 Reports are composed of charts and tables, which are represented as Visual objects.
