@@ -2,48 +2,28 @@ from abc import ABC, abstractmethod
 import pandas as pd
 
 class Pipeline(ABC):
-    def __init__(self, df=None, transformers:list=[]):
+    def __init__(self, df=None, data_source=None, transformers:list=[]):
        self.df = df
        self.transformers = transformers
-       self.visualizers = []
-       self.visuals = []
 
     @abstractmethod
-    def implement_pipeline_steps(self):
+    def implement(self):
         pass
+
+    def load_data(self, df):
+        self.df = df
 
     def load_transformers(self, transformers:list):
         for transformer in transformers:
             self.transformers.append(transformer)
-    
-    def load_visualizers(self, visualizers:list):
-        self.visualizers = visualizers
-    
-    def load_data(self, df):
-        self.df = df
-
-    def get_data(self):
-        return self.df
-    
-    def get_visuals(self):
-        return self.visuals
 
     def execute_transformers(self):
         for transformer in self.transformers:
             self.df = transformer.transform(self.df)
 
-    def execute_visualizers(self):
-        for visualizer in self.visualizers:
-            self.visuals.append(visualizer.create_visual(self.df))
-
-    def reset_pipeline_output(self):
+    def reset_pipe(self):
         self.df = None
-        self.visuals = []
 
-    def run_pipeline(self):
-        self.reset_pipeline_output()
-        self.implement_pipeline_steps()
-        self.execute_transformers()
-        self.execute_visualizers()
-        return self
+    def run(self):
+        return self.implement()
 
