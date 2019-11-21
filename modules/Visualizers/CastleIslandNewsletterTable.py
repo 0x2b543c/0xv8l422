@@ -10,7 +10,7 @@ class CastleIslandNewsletterTable(Vis):
 
     # Asset PriceUSD PriceUSD.1dGrowth PriceUSD.7dGrowth MarketCap RealizedCap
 
-
+    
     def implement(self, df):
         fig = go.Figure(data=[go.Table(
             header={
@@ -19,8 +19,7 @@ class CastleIslandNewsletterTable(Vis):
                 'align': 'left'
             },
             cells={
-                'values': [df[column] for column in self.table_columns],
-                'fill_color': 'snow',
+                'values': [df[[column for column in df.columns if column.split('.')[0] == asset]] for asset in assets]
                 'align': 'left'
             }
         )])

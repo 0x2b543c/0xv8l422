@@ -47,6 +47,12 @@ class CM_API(DataLoader):
 
 
     def get_coinmetrics_candles_data(self, api_key:str, assets=[str], market_id:str=None, reference_time:str=None, direction:str='forward', limit:int=100, time_aggregation:str='1d', latest:bool=None):
+        # TODO: 
+        # - for asset in assets
+        # - call discovery endpoint to get all markets
+        # - and filter by usd + stablecoin spot markets
+        # - get data 
+        # - map column names to asset.market.candles
         url = 'https://api.coinmetrics.io/v3/markets/{}/candles'.format(market_id)
         params = {
             'reference_time': reference_time,
