@@ -35,7 +35,7 @@ class ETHContractsPipe(Pipe):
             'TxTfrCnt'
         ] + additional_metrics
         
-    def implement_pipeline_steps(self):
+    def implement(self):
         df = CM_API().get_coinmetrics_network_data(api_key=self.api_key, assets=self.assets, metrics=self.metrics, start=self.start, end=self.end)
 
         transformers = [
@@ -52,3 +52,6 @@ class ETHContractsPipe(Pipe):
 
         self.load_data(df=df)
         self.load_transformers(transformers=transformers)
+        self.execute_transformers()
+
+        return self.df

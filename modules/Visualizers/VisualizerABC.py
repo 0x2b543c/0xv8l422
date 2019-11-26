@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 
 class Visualizer(ABC):
-    def __init__(self, _id:int, df, title:str, section:str=None, order:int=None, custom_formatting:str=None):
-        self.id = _id
+    def __init__(self, df, title:str, section:str=None, order:int=None, custom_formatting:str=None):
         self.df = df
         self.title = title
         self.section = section

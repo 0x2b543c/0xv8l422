@@ -4,8 +4,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 class LineChart(Vis):
-    def __init__(self, _id:int, df, title:str, y_columns:[str]='all', y2_axis_columns:[str]=None, x_axis_column:str='index'):
-        super().__init__(_id=_id, df=df, title=title)
+    def __init__(self, df, title:str, y_columns:[str]='all', y2_axis_columns:[str]=None, x_axis_column:str='index'):
+        super().__init__(df=df, title=title)
         self.y_columns = y_columns
         self.y2_axis_columns = y2_axis_columns
         self.x_axis_column = x_axis_column

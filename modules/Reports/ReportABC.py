@@ -3,7 +3,6 @@ import pandas as pd
 import nbformat as nbf
 from random import randint
 from pathlib import Path
-from .ReportDataSource import ReportDataSource
 
 
 class Report(ABC):

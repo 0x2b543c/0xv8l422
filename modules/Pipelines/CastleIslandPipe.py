@@ -102,7 +102,7 @@ class CastleIslandPipe(Pipe):
            'Realized Cap': '${0:,.1f}B'
         }
 
-        self.df = self.df.style.format(mapper)
+        self.df.style.format(mapper)
         
 
         return self.df

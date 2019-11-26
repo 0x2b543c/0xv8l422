@@ -3,8 +3,8 @@ import pandas as pd
 import plotly.graph_objects as go
 
 class LineChartMetricByAssets(Vis):
-    def __init__(self, _id:int, df, title:str,  metric:str, assets:[str]='all', section:str=None, order:int=None):
-        super().__init__(_id=_id, df=df, title=title, section=section, order=order)
+    def __init__(self, df, title:str,  metric:str, assets:[str]='all', section:str=None, order:int=None):
+        super().__init__(df=df, title=title, section=section, order=order)
         self.metric = metric
         self.assets = assets
 
