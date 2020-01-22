@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import pandas as pd
 
 class Pipeline(ABC):
-    def __init__(self, df=None, data_source=None, transformers:list=[]):
+    def __init__(self, df=None, transformers:list=[]):
        self.df = df
        self.transformers = transformers
 

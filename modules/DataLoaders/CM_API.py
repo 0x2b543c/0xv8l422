@@ -17,7 +17,7 @@ class CM_API(DataLoader):
                 'metrics': ','.join(metrics),
                 'start': start,
                 'end': end
-            }      
+            } 
             response = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
             if 'error' in list(response.keys()):
                 error_message = response['error']['description']

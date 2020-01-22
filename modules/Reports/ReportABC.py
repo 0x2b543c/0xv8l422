@@ -24,6 +24,16 @@ class Report(ABC):
     def load_visual(self, visuals):
         self.visuals = visuals
 
+    def add_data_source(self, data_source):
+        self.data_sources[data_source['id']] = data_source
+
+    def get_dfs(self):
+        return self.dfs
+
+    def format_y_axis_as_percent(self):
+        for visual in self.visuals:
+            visual.fig.update_layout(yaxis= {'tickformat': ',.0%'})
+
     def render_visualizations(self, section:str=None):
         if section is not None:
             section_visuals = [visual for visual in self.visuals if visual.section == section]

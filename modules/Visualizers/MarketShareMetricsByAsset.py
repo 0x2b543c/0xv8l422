@@ -3,8 +3,8 @@ import pandas as pd
 import plotly.graph_objects as go
 
 class MarketShareMetricsByAsset(Vis):
-    def __init__(self, df,  title:str, asset:str, metrics:[str]):
-        super().__init__(df=df, title=title)
+    def __init__(self, df,  title:str, asset:str, metrics:[str], section:str=None, filled_area:bool=None):
+        super().__init__(df=df, title=title, section=section)
         self.asset = asset
         self.metrics = metrics
 
