@@ -2,15 +2,21 @@ import pytest
 import sys
 import os 
 import pandas as pd
+import pdb
 dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
 sys.path.append(dir_path)
 
+print("DIRT PATH", dir_path)
+
 from modules.DataLoaders import CM_API as cm
+from modules.DataLoaders.CMDataGroups import CMDataGroups
+from modules.Transformers.DateNormalizer import DateNormalizer
+from modules.Transformers.CastToFloats import CastToFloats
 
 def test_call_coinmetrics_api():
     testObj = cm.CM_API()
     test_params = {
-        'metrics': 'AdrActCnt,CapRealUSD,TxCnt',
+        'metrics': 'AdrActCnt,PriceUSD,TxCnt',
         'start': '2017-01-01',
         'end': '2017-01-05'
     }
@@ -330,13 +336,45 @@ def test_convert_coinmetrics_network_data_JSON_to_df():
 
 def test_get_coinmetrics_network_data():
     testObj = cm.CM_API()
-    result = testObj.get_coinmetrics_network_data(api_key='mlR99PGlp1PpNiMYxcG0', assets=['eth'], metrics=['AdrActCnt','CapRealUSD','TxCnt'], start='2017-01-01', end='2017-01-05')
-    dummy_result = pd.DataFrame([
-        ['2017-01-01T00:00:00.000Z', '13946.0', '734673672.319139817831833516177060007323674', '38730.0'], ['2017-01-02T00:00:00.000Z', '15232.0', '736035521.072371336253635824094185064179384', '39652.0'], ['2017-01-03T00:00:00.000Z', '14868.0', '741146428.959793620825964110400677939075684', '45883.0'], ['2017-01-04T00:00:00.000Z', '18066.0', '749721286.811463913996829494293959461077514', '50673.0'], ['2017-01-05T00:00:00.000Z', '18850.0', '748266829.167562703036783836603937695508484', '49596.0']
-        ], columns=['time', 'eth.AdrActCnt', 'eth.CapRealUSD', 'eth.TxCnt'])
-    dummy_result.set_index('time', inplace=True)
+
+
+    api_key = 'X3lotGijS27jky7bhO3t'
+    assets = ['btc', 'eth', 'bat', 'dcr', 'xtz']
+    metrics = ['AdrActCnt', 'PriceUSD', 'TxCnt']
+    start = '2019-01-01'
+    end = '2019-01-07'
+
+    result = testObj.get_coinmetrics_network_data(api_key=api_key, assets=assets, metrics=metrics, start=start, end=end)
+
+    dummy_result = pd.read_csv('./tests/test_data/test-network-data.csv')
+    dummy_result.set_index('date', inplace=True)
+
+    # pdb.set_trace()
+
     print('Expected result:', dummy_result)
     print('Real result:', result)
+
+    assert dummy_result.equals(result)
+
+def test_stablecoin_usage_network_data():
+    testObj = cm.CM_API()
+
+
+    api_key = 'X3lotGijS27jky7bhO3t'
+    assets = CMDataGroups().get_asset_groups()['stablecoins']
+    metrics = CMDataGroups().get_metric_groups()['usage']
+    start = '2019-01-01'
+    end = '2019-01-07'
+    result = testObj.get_coinmetrics_network_data(api_key=api_key, assets=assets, metrics=metrics, start=start, end=end)
+    dummy_result = pd.read_csv('./tests/test_data/stablecoin-usage-data.csv')
+    dummy_result.set_index('date', inplace=True)
+    dummy_result.index.rename('time', inplace=True)
+    dummy_result = DateNormalizer().transform(dummy_result)
+    dummy_result = CastToFloats().transform(dummy_result)
+
+    print('Expected result:', dummy_result)
+    print('Real result:', result)
+
     assert dummy_result.equals(result)
 
 def test_get_coinmetrics_trades_data():
