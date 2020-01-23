@@ -24,7 +24,6 @@ class CM_API(DataLoader):
 
     def clean_df(self, df):            
             df = CastToFloats().transform(df)
-            # df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
             df = DateNormalizer().transform(df)
             return df
             
@@ -34,6 +33,7 @@ class CM_API(DataLoader):
         result = pd.DataFrame()
         for asset in assets:
             _metrics = []
+            ### Check if we have coverage for each metric per each asset (for example, do we have CapRealUSD for each asset?)
             for metric in metrics:
                 if metric in self.network_data_asset_info[asset]:
                     _metrics.append(metric)
@@ -48,7 +48,6 @@ class CM_API(DataLoader):
             if 'error' in list(response.keys()):
                 error_message = response['error']['description']
                 print('Network Data API Error: {} for asset: {}'.format(error_message, asset))
-
             df = self.convert_coinmetrics_network_data_JSON_to_df(response)
             df.set_index('time', inplace=True)
             df.columns = [asset + '.' + column for column in list(df.columns)]
@@ -56,7 +55,7 @@ class CM_API(DataLoader):
         result = self.clean_df(result)    
         return result
 
-    def get_coinmetrics_realtime_network_data_multiple(self, api_key:str, assets:[str], metrics:[str], reference_time:str=None, reference_height:str=None, direction:str='forward', limit:int=100, staging:bool=False):
+    def get_coinmetrics_realtime_network_data(self, api_key:str, assets:[str], metrics:[str], reference_time:str=None, reference_height:str=None, direction:str='forward', limit:int=100, staging:bool=False):
         result = pd.DataFrame()
         for asset in assets:
             url_prefix = 'staging-' if staging == True else ''
@@ -125,19 +124,6 @@ class CM_API(DataLoader):
         }      
         result = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
         df = self.convert_coinmetrics_market_data_JSON_to_df(result)
-        return df 
-
-    def get_coinmetrics_realtime_network_data(self, api_key:str, asset_id:str, metrics:str, reference_time:str=None, reference_height:str=None, direction:str=None, limit:str=None):
-        url = 'https://api.coinmetrics.io/v3/assets/{}/realtimemetricdata'.format(asset_id)
-        params = {
-            'metrics': metrics,
-            'reference_time': reference_time,
-            'reference_height': reference_height,
-            'direction': direction,
-            'limit': limit
-        }      
-        result = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
-        df = self.convert_coinmetrics_network_data_JSON_to_df(result)     
         return df 
 
     def get_coinmetrics_discovery_assets(self, api_key:str):
