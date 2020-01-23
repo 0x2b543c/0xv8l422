@@ -4,7 +4,7 @@ class CMDataGroups(DataLoader):
     def __init__(self):
         super().__init__()
     
-    def get_asset_groups(self):
+    def get_asset_group(self, group_name):
         asset_groups = {
             'stablecoins': ['dai', 'gusd', 'pax', 'usdc', 'tusd', 'usdt', 'usdt_eth'],
             'erc-20s': ['ant', 'bat', 'cennz', 'ctxc', 'cvc', 'fun', 'link', 'loom', 'gno', 'gnt', 'icn', 'lrc', 'mana', 'mkr', 'omg', 'pay', 'poly', 'powr', 'ppt', 'qash', 'rep', 'salt', 'sr', 'wtc', 'zrx'],
@@ -13,9 +13,9 @@ class CMDataGroups(DataLoader):
             'privacy-coins': ['grin', 'xmr','xvg','zec'],
             'exchange-tokens': ['bnb', 'bnb_mainnet', 'ht', 'knc', 'leo_eos', 'leo_eth', 'zrx']
         }
-        return asset_groups
+        return asset_groups[group_name]
     
-    def get_metric_groups(self):
+    def get_metric_group(self, group_name):
         metric_groups = {
             'addresses-w-balance-greater-than-x-usd': ['AdrBalUSD1Cnt', 'AdrBalUSD10Cnt', 'AdrBalUSD100Cnt', 'AdrBalUSD1KCnt', 'AdrBalUSD10KCnt', 'AdrBalUSD100KCnt', 'AdrBalUSD1MCnt', 'AdrBalUSD10MCnt'],
             'valuation': [
@@ -32,4 +32,4 @@ class CMDataGroups(DataLoader):
                 'BlkSizeByte'
             ]
         }
-        return metric_groups
+        return metric_groups[group_name]
