@@ -1,20 +1,26 @@
 from abc import ABC, abstractmethod
 from ..Transformers.PercentGrowth import PercentGrowth
 from ..Transformers.RollingAverage import RollingAverage
+from ..Transformers.DatePicker import DatePicker
 from pathlib import Path
 
 class Visualizer(ABC):
-    def __init__(self, df, title:str, section:str=None, order:int=None, custom_formatting:str=None, growth:str=None, seven_day_rolling_average:str=None):
+    def __init__(self, df, title:str, x_column:str='index', y_columns:[str]=None, assets:[str]=None, metrics:[str]=None, custom_formatting:str=None, growth:str=None, seven_day_rolling_average:str=None, start:str=None, end:str=None):
         self.df = df
         self.title = title
-        self.section = section
-        self.order = order
         self.custom_formatting = custom_formatting
         self.fig = None
         # Display Options
         # TODO: Add these as params
         self.growth = growth
         self.seven_day_rolling_average = seven_day_rolling_average
+        self.start = start
+        self.end = end
+
+        self.assets = assets
+        self.metrics = metrics
+        self.x_column = x_column
+        self.y_columns = y_columns if y_columns else self.convert_assets_and_metrics_to_columns(assets=self.assets, metrics=self.metrics)
 
         # self.market_share = market_share
         # self.aggregate = aggregate
@@ -25,6 +31,13 @@ class Visualizer(ABC):
     @abstractmethod
     def implement(self, df):
         pass
+
+    def convert_assets_and_metrics_to_columns(self, assets:[str], metrics:[str]):
+        columns = []
+        for asset in assets:
+            for metric in metrics:
+                columns.append(f'{asset}.{metric}')
+        return columns
 
     def show(self):
         # TODO: Put in check for visual type (e.g. Plotly, Matplot, etc.)
@@ -509,6 +522,7 @@ class Visualizer(ABC):
             self.df = self.df.iloc[7:]
         if self.growth == True:
             self.df= PercentGrowth().transform(self.df)
+        self.df = DatePicker(start=self.start, end=self.end).transform(self.df)
         self.implement()
         self.update_fig_layout()
         return self

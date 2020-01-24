@@ -32,6 +32,13 @@ class NetworkDataAPI(DataLoader):
             df = CastToFloats().transform(df)
             df = DateNormalizer().transform(df)
             return df
+
+    def filter_metrics_available_by_asset(self, asset:str, metrics:[str]):
+        _metrics = []
+        for metric in metrics:
+            if metric in self.network_data_asset_info[asset]:
+                _metrics.append(metric)
+        return _metrics
             
     def get_coinmetrics_network_data(self, api_key:str, assets:[str], metrics:[str], start:str=None, end:str=None, staging:bool=False):
         if bool(self.network_data_asset_info) == False:

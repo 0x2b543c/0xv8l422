@@ -5,20 +5,21 @@ from plotly.subplots import make_subplots
 import math 
 
 class SubPlot(Vis):
-    def __init__(self, df, title:str, number_of_rows:int, number_of_columns:int, columns_to_plot:[str], y2_price_trace:bool=False, x_axis_column:str='index', section:str=None, growth=None, seven_day_rolling_average=None, layout_type:str=None, shared_yaxes=False):
-        super().__init__(df=df, title=title, section=section, growth=growth, seven_day_rolling_average=seven_day_rolling_average)
-        self.columns_to_plot = columns_to_plot
+    def __init__(self, df, title:str, x_column:str='index', y_columns:[str]=None, assets:[str]=None, metrics:[str]=None, y2_price_trace:bool=False, growth=None, seven_day_rolling_average=None, layout_type:str=None, shared_yaxes=False):
+        super().__init__(df=df, title=title, x_column=x_column, y_columns=y_columns, assets=assets, metrics=metrics, growth=growth, seven_day_rolling_average=seven_day_rolling_average)
         self.y2_price_trace = y2_price_trace
-        self.x_axis_column = x_axis_column
+        self.x_column = x_column
         self.growth = growth
-        self.number_of_rows = number_of_rows
-        self.number_of_columns = number_of_columns
-        self.columns_to_plot = columns_to_plot
+        self.layout_type = layout_type
+        self.shared_yaxes = shared_yaxes
+
+        self.number_of_rows = math.ceil(len(self.y_columns) / 3) 
+        self.number_of_rows = self.number_of_rows if self.number_of_rows > 0 else 1
+        self.number_of_columns = 3
         self.row_index = 1
         self.column_index = 1
         self.plot_index = 1
-        self.layout_type = layout_type
-        self.shared_yaxes = shared_yaxes
+
 
     def increment_indexes(self):
         if self.column_index >= self.number_of_columns:
@@ -29,7 +30,7 @@ class SubPlot(Vis):
         self.plot_index += 1
 
     def implement(self):
-        # last_values = [self.df[column].iloc[self.df[column].size - 1] for column in self.columns_to_plot]
+        # last_values = [self.df[column].iloc[self.df[column].size - 1] for column in self.y_columns]
         percent_layout_types = ['growth', 'raw_percent', 'volatility']
         exchange_names_map = {
             'BFX': 'Bitfinex',
@@ -50,11 +51,11 @@ class SubPlot(Vis):
             # horizontal_spacing=0.5,
             # vertical_spacing=0.4,
             ### TITLES FOR NETWORK DATA ###
-            # subplot_titles=[column.split('.')[0] + ', ' + ('$' if self.layout_type == 'fees' else '') + str('{:.2f}'.format(round(self.df[column].iloc[self.df[column].size - 1] * (100 if self.layout_type in ['growth', 'volatility'] else 1), 2))) + ('%' if self.layout_type in percent_layout_types else '') if math.isnan(float(self.df[column].iloc[self.df[column].size - 1])) is False else column.split('.')[0] + ', -' for column in self.columns_to_plot],
+            # subplot_titles=[column.split('.')[0] + ', ' + ('$' if self.layout_type == 'fees' else '') + str('{:.2f}'.format(round(self.df[column].iloc[self.df[column].size - 1] * (100 if self.layout_type in ['growth', 'volatility'] else 1), 2))) + ('%' if self.layout_type in percent_layout_types else '') if math.isnan(float(self.df[column].iloc[self.df[column].size - 1])) is False else column.split('.')[0] + ', -' for column in self.y_columns],
             ### TITLES FOR EXCHANGE SUPPLY ###
-            subplot_titles=[exchange_names_map[column.split('.')[1][4:7]] for column in self.columns_to_plot]
+            subplot_titles=[exchange_names_map[column.split('.')[1][4:7]] for column in self.y_columns]
         )
-        for column in self.columns_to_plot:
+        for column in self.y_columns:
             metric = column.split('.')[1]
             last_val = self.df[column].iloc[self.df[column].size - 1]
             asset = column.split('.')[0]

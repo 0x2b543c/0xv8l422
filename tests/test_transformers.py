@@ -6,6 +6,10 @@ dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
 sys.path.append(dir_path)
 
 from modules.Transformers import DateNormalizer as dn
+from modules.Transformers.DatePicker import DatePicker
+from modules.Transformers.DateNormalizer import DateNormalizer
+from modules.Transformers.CastToFloats import CastToFloats
+from tests.utils import clean_test_data, log_test_data
 
 def test_transform_dates_to_yyyy_mm_dd():
     column_headers = ['time', 'blockHash', 'parentBlockHash', 'height', 'AdrActRecCnt', 'AdrActCnt']
@@ -21,3 +25,15 @@ def test_transform_dates_to_yyyy_mm_dd():
     test_transformer = dn.DateNormalizer(input_column='time')
     result = test_transformer.transform(test_df)
     assert dummy_result.equals(result)
+
+def test_datepicker():
+    start = '2019-01-01'
+    end = '2019-01-03'
+    testTransform = DatePicker(start=start, end=end)
+    result = pd.read_csv('./tests/test_data/datepicker-network-data.csv')
+    result = clean_test_data(df=result)
+    result = testTransform.transform(result)
+    dummy_result = pd.read_csv('./tests/test_data/datepicker-network-data.csv')
+    dummy_result = clean_test_data(df=dummy_result)
+
+    log_test_data(dummy_result=dummy_result, result=result)

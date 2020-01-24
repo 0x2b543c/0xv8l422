@@ -6,7 +6,9 @@ sys.path.append(dir_path)
 from modules.Transformers.DateNormalizer import DateNormalizer
 from modules.Transformers.CastToFloats import CastToFloats
 
-def clean_test_data(self, df):
+def clean_test_data(df):
+    df.set_index('date', inplace=True)
+    df.index.rename('time', inplace=True)
     df = DateNormalizer().transform(df)
     df = CastToFloats().transform(df)
     return df

@@ -4,11 +4,23 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 class LineChart(Vis):
-    def __init__(self, df, title:str, y_columns:[str]='all', y2_axis_columns:[str]=None, x_axis_column:str='index', section:str=None, growth=None, filled_area:bool=False, stacked:bool=False, seven_day_rolling_average=False):
-        super().__init__(df=df, title=title, section=section, growth=growth, seven_day_rolling_average=seven_day_rolling_average)
-        self.y_columns = y_columns
-        self.y2_axis_columns = y2_axis_columns
-        self.x_axis_column = x_axis_column
+    ### Options:
+    #   tranformations:
+    #   x seven-day rolling avg.
+    #   x growth % 
+    #   x datepicker
+    #   o datewindow    
+    #   o x-day rolling avg.
+    #   o aggregate (sum, avg, etc.)
+    #   formatting:
+    #   o log   
+    #   - filled area line chart
+    #   - stacked filled area
+    ###
+    def __init__(self, df, title:str, x_column:str='index', y_columns:[str]=None,  y2_columns:[str]=None,  assets:[str]=None, metrics:[str]=None, start:str=None, end:str=None, growth=None, seven_day_rolling_average=False, filled_area:bool=False, stacked:bool=False):
+        super().__init__(df=df, title=title, x_column=x_column, y_columns=y_columns, assets=assets, metrics=metrics, start=start, end=end, growth=growth, seven_day_rolling_average=seven_day_rolling_average)
+        self.y2_columns = y2_columns
+        self.x_column = x_column
         self.filled_area = filled_area
         self.stacked = stacked
 
@@ -44,19 +56,20 @@ class LineChart(Vis):
         # fig = make_subplots(specs=[[{"secondary_y": True}]])
         color_counter = 0
         for column in self.y_columns:
-            fig.add_trace(go.Scatter(x=self.df.index if self.x_axis_column == 'index' else self.df[self.x_axis_column], y=self.df[column],
+            fig.add_trace(go.Scatter(x=self.df.index if self.x_column == 'index' else self.df[self.x_column], y=self.df[column],
                                 mode='lines',
                                 name=column,
                                 marker = {
                                     'color': '#0381E0' if len(self.y_columns) < 2 else None
                                 },
                                 fill='tonexty' if self.filled_area == True else 'none',
-                                stackgroup='one' if self.stacked == True else None
+                                stackgroup='one' if self.stacked == True else None,
+                                # groupnorm='percent' if self.stacked == True else None
                                 ))
             color_counter += 1                                
-        if self.y2_axis_columns != None:
-            for column in self.y2_axis_columns:
-                fig.add_trace(go.Scatter(x=self.df.index if self.x_axis_column == 'index' else self.df[self.x_axis_column], y=self.df[column],
+        if self.y2_columns != None:
+            for column in self.y2_columns:
+                fig.add_trace(go.Scatter(x=self.df.index if self.x_column == 'index' else self.df[self.x_column], y=self.df[column],
                                     mode='lines',
                                     name=column,
                                     yaxis='y2',
