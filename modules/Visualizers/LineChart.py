@@ -17,8 +17,35 @@ class LineChart(Vis):
     #   - filled area line chart
     #   - stacked filled area
     ###
-    def __init__(self, df, title:str, x_column:str='index', y_columns:[str]=None,  y2_columns:[str]=None,  assets:[str]=None, metrics:[str]=None, start:str=None, end:str=None, growth=None, seven_day_rolling_average=False, filled_area:bool=False, stacked:bool=False):
-        super().__init__(df=df, title=title, x_column=x_column, y_columns=y_columns, assets=assets, metrics=metrics, start=start, end=end, growth=growth, seven_day_rolling_average=seven_day_rolling_average)
+    def __init__(
+        self, 
+        df, 
+        title:str, 
+        x_column:str='index', 
+        y_columns:[str]=None,  
+        y2_columns:[str]=None,  
+        assets:[str]=None, 
+        metrics:[str]=None, 
+        start:str=None, 
+        end:str=None, 
+        growth=None, 
+        seven_day_rolling_average=False, 
+        filled_area:bool=False, 
+        stacked:bool=False
+        ):
+        
+        super().__init__(
+            df=df, 
+            title=title, 
+            x_column=x_column, 
+            y_columns=y_columns, 
+            assets=assets, 
+            metrics=metrics, 
+            start=start, 
+            end=end, 
+            growth=growth, 
+            seven_day_rolling_average=seven_day_rolling_average
+            )
         self.y2_columns = y2_columns
         self.x_column = x_column
         self.filled_area = filled_area

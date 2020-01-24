@@ -5,7 +5,7 @@ from ..Transformers.DatePicker import DatePicker
 from pathlib import Path
 
 class Visualizer(ABC):
-    def __init__(self, df, title:str, x_column:str='index', y_columns:[str]=None, assets:[str]=None, metrics:[str]=None, custom_formatting:str=None, growth:str=None, seven_day_rolling_average:str=None, start:str=None, end:str=None):
+    def __init__(self, df, title:str, x_column:str='index', y_columns:[str]=None, assets:[str]=None, metrics:[str]=None, custom_formatting:str=None, growth:str=None, seven_day_rolling_average:str=None, start:str=None, end:str=None, annotations:bool=True, showlegend:bool=True):
         self.df = df
         self.title = title
         self.custom_formatting = custom_formatting
@@ -21,6 +21,9 @@ class Visualizer(ABC):
         self.metrics = metrics
         self.x_column = x_column
         self.y_columns = y_columns if y_columns else self.convert_assets_and_metrics_to_columns(assets=self.assets, metrics=self.metrics)
+
+        self.annotations = annotations
+        self.showlegend = showlegend
 
         # self.market_share = market_share
         # self.aggregate = aggregate
@@ -49,6 +52,20 @@ class Visualizer(ABC):
         self.fig.write_image(file_path)
 
     def update_fig_layout(self):
+        _annotations = None if self.annotations == False else [{
+                'text': "Source: Coin Metrics Network Data Pro",
+                'font': {
+                    'size': 12,
+                    'color': 'black',
+                    },
+                'showarrow': False,
+                'align': 'left',
+                'valign': 'top',
+                'x': -0.04,
+                'y': 1.1025,
+                'xref': 'paper',
+                'yref': 'paper',
+            }]
         background_color = '#F5F5F5'
         # y_axis = {'tickformat': ',.0%'} if self.growth == True else {}
         # y_axis = {'tickformat': ',.0%'} 
@@ -74,6 +91,7 @@ class Visualizer(ABC):
             #     'side': 'right',
             #     # 'overlaying': 'y'
             # },
+            showlegend=self.showlegend,
             paper_bgcolor = background_color,
             plot_bgcolor = background_color,
             legend= {
@@ -84,20 +102,7 @@ class Visualizer(ABC):
                 'y': 1.05,
                 'orientation': 'h'
             },
-            # annotations= [{
-            #     'text': "Source: Coin Metrics Network Data Pro",
-            #     'font': {
-            #         'size': 12,
-            #         'color': 'black',
-            #         },
-            #     'showarrow': False,
-            #     'align': 'left',
-            #     'valign': 'top',
-            #     'x': -0.04,
-            #     'y': 1.1025,
-            #     'xref': 'paper',
-            #     'yref': 'paper',
-            # }]
+            annotations= _annotations
         )
 
         if self.growth == 'something':
