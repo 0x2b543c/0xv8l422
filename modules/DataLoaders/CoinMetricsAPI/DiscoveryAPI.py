@@ -7,9 +7,11 @@ import pdb
 from modules.DataLoaders.DataLoaderABC import DataLoader as DataLoader
 
 class DiscoveryAPI(DataLoader):
-    def __init__(self):
+    def __init__(self, api_key:str=None):
         super().__init__()
+        self.api_key = 'X3lotGijS27jky7bhO3t'
         self.network_data_asset_info = {}
+        self.create_network_data_asset_info_map(self.api_key)
 
     def get_coinmetrics_discovery_assets(self, api_key:str):
         url = 'https://api.coinmetrics.io/v3/assets/'

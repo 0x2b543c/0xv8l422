@@ -2,6 +2,7 @@ from .VisualizerABC import Visualizer as Vis
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import pdb
 
 class LineChart(Vis):
     ### Options:
@@ -27,11 +28,14 @@ class LineChart(Vis):
         assets:[str]=None, 
         metrics:[str]=None, 
         start:str=None, 
-        end:str=None, 
+        end:str=None,
+        date_window:str=None,  
         growth=None, 
         seven_day_rolling_average=False, 
         filled_area:bool=False, 
-        stacked:bool=False
+        stacked:bool=False,
+        y_log:bool=False,
+        y2_log:bool=False
         ):
         
         super().__init__(
@@ -43,8 +47,11 @@ class LineChart(Vis):
             metrics=metrics, 
             start=start, 
             end=end, 
+            date_window=date_window,
             growth=growth, 
-            seven_day_rolling_average=seven_day_rolling_average
+            seven_day_rolling_average=seven_day_rolling_average,
+            y_log=y_log,
+            y2_log=y2_log
             )
         self.y2_columns = y2_columns
         self.x_column = x_column
@@ -91,21 +98,22 @@ class LineChart(Vis):
                                 },
                                 fill='tonexty' if self.filled_area == True else 'none',
                                 stackgroup='one' if self.stacked == True else None,
-                                # groupnorm='percent' if self.stacked == True else None
+                                groupnorm='percent' if self.stacked == True else None
                                 ))
             color_counter += 1                                
         if self.y2_columns != None:
-            for column in self.y2_columns:
-                fig.add_trace(go.Scatter(x=self.df.index if self.x_column == 'index' else self.df[self.x_column], y=self.df[column],
+            
+            for y2_column in self.y2_columns:
+                fig.add_trace(go.Scatter(x=self.df.index if self.x_column == 'index' else self.df[self.x_column], y=self.df[y2_column],
                                     mode='lines',
-                                    name=column,
+                                    name=y2_column,
                                     yaxis='y2',
                                     line = {
                                         'width': 2
                                     },
                                     marker= {
                                         'opacity': 0.25,
-                                        'color': 'black',
+                                        # 'color': 'black',
                                         # 'symbol': 'circle-dot',
                                         'size': 1
 

@@ -1,4 +1,5 @@
 from .VisualizerABC import Visualizer as Vis
+from ..DataLoaders.CoinMetricsAPI.DiscoveryAPI import DiscoveryAPI
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -22,7 +23,8 @@ class SubPlot(Vis):
         assets:[str]=None, 
         metrics:[str]=None, 
         start:str=None, 
-        end:str=None, 
+        end:str=None,
+        date_window:str=None, 
         y2_price_trace:bool=False, 
         growth=None, 
         seven_day_rolling_average=None, 
@@ -40,7 +42,8 @@ class SubPlot(Vis):
             assets=assets, 
             metrics=metrics, 
             start=start, 
-            end=end, 
+            end=end,
+            date_window=date_window, 
             growth=growth, 
             seven_day_rolling_average=seven_day_rolling_average, 
             showlegend=showlegend, 
@@ -52,13 +55,31 @@ class SubPlot(Vis):
         self.layout_type = layout_type
         self.shared_yaxes = shared_yaxes
         self.subplot_titles = subplot_titles
+        self.stacked = False
+        self.filled_area = False
 
-        self.number_of_rows = math.ceil(len(self.y_columns) / 3) 
+        self.discovery_api = DiscoveryAPI()
+
+        self.number_of_rows = math.ceil(len(self.filter_available_columns(self.y_columns)) / 3)
         self.number_of_rows = self.number_of_rows if self.number_of_rows > 0 else 1
         self.number_of_columns = 3
         self.row_index = 1
         self.column_index = 1
         self.plot_index = 1
+
+       
+
+        self.height = self.number_of_rows * 150 + 150
+        self.height = self.height if self.height > 0 else 500
+
+    def filter_available_columns(self, columns):
+        filtered_columns = []
+        for column in columns:
+            asset = column.split('.')[0]
+            metric = column.split('.')[1]
+            if metric in self.discovery_api.network_data_asset_info[asset]:
+                filtered_columns.append(column)
+        return filtered_columns
 
 
     def increment_indexes(self):
@@ -85,12 +106,12 @@ class SubPlot(Vis):
 
         }
         _subplot_titles = ''
-        if self.subplot_titles == "assets":
-            _subplot_titles = self.assets
-        elif self.subplot_titles == "metrics":
-            _subplot_titles = self.metrics
-        else:
-            _subplot_titles = self.y_columns
+        # if self.subplot_titles == "assets":
+        #     _subplot_titles = self.assets
+        # elif self.subplot_titles == "metrics":
+        #     _subplot_titles = self.metrics
+        # else:
+        _subplot_titles = self.y_columns
         
         fig = make_subplots(
             rows=self.number_of_rows, 
@@ -103,12 +124,11 @@ class SubPlot(Vis):
             # subplot_titles=[column.split('.')[0] + ', ' + ('$' if self.layout_type == 'fees' else '') + str('{:.2f}'.format(round(self.df[column].iloc[self.df[column].size - 1] * (100 if self.layout_type in ['growth', 'volatility'] else 1), 2))) + ('%' if self.layout_type in percent_layout_types else '') if math.isnan(float(self.df[column].iloc[self.df[column].size - 1])) is False else column.split('.')[0] + ', -' for column in self.y_columns],
             ### TITLES FOR EXCHANGE SUPPLY ###
             # subplot_titles=[exchange_names_map[column.split('.')[1][4:7]] for column in self.y_columns],
-            subplot_titles= _subplot_titles
+            subplot_titles= _subplot_titles,
         )
         for column in self.y_columns:
-            last_val = self.df[column].iloc[self.df[column].size - 1]
-            
-            if self.layout_type == 'growth':
+            last_val = self.df[column].iloc[self.df[column].size - 1]            
+            if self.growth == True:
                 line_color = 'green' if last_val >= 0 else 'red'
             else:
                 line_color = 'black'
@@ -148,12 +168,22 @@ class SubPlot(Vis):
                     row=self.row_index, col=self.column_index
                 )
 
-                if self.growth == True:
-                    y_axis = {'tickformat': ',.0%'} 
-                    # fig.update_layout(yaxis=y_axis)
+            if self.growth == True:
+                layout_updates = {}
+                tick_format = {'tickformat': ',.0%'} 
+                grid_format = {'showgrid': False}
+                for x in range(len(self.y_columns)):
+                    layout_updates[f'yaxis{x + 1}'] = tick_format
+                    layout_updates[f'xaxis{x + 1}'] = grid_format
+                # pdb.set_trace()
+                fig.update_layout(**layout_updates)
 
             self.increment_indexes()
         
+        
         self.fig = fig
+        self.fig.update_layout(
+            height = self.height
+        )
 
 

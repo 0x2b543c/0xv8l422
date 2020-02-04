@@ -25,19 +25,22 @@ def convert_assets_and_metrics_to_columns(self, assets:[str], metrics:[str]):
                 columns.append(f'{asset}.{metric}')
         return columns
 
+def check_if_metric_in_df(self, df, asset, metric):
+    columns = list(df.columns)
+
+
 ### chart_type either 'line' or 'subplot'
 ### split_charts_by either 'assets' or 'metrics'
 def create_network_data_chart(**kwargs):
     if kwargs['chart_type'] == 'line':
         chart_args = dict(kwargs)
         del chart_args['chart_type']
-        # pdb.set_trace()
         chart = LineChart(**chart_args)
     elif kwargs['chart_type'] == 'subplot':
         chart_args = dict(kwargs)
         del chart_args['chart_type']
-        del chart_args['filled_area']
-        del chart_args['stacked']
+        # del chart_args['filled_area']
+        # del chart_args['stacked']
         chart = SubPlot(**chart_args)
     result = chart.run()
     return result
