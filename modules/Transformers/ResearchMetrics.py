@@ -1,4 +1,5 @@
 from .TransformerABC import Transformer as tabc
+from ..DataLoaders.CMDataGroups import CMDataGroups
 import pandas as pd
 import pdb
 
@@ -7,16 +8,25 @@ class MetricName(Enum):
     THERMOTOMARKETCAP = 'ThermoToMarketCap'
 
 class ResearchMetrics(tabc):
-    def __init__(self, metric_name:MetricName, assets:[str], metrics:[str], network_data_asset_info:dict):
-        self.metric_name = metric_name
+    def __init__(self, research_metric_names:[MetricName]=None, assets:[str]=None, network_data_asset_info:dict=None):
+        self.research_metric_names = research_metric_names
         self.assets = assets
-        self.metrics = metrics
+        self.asset_groups = CMDataGroups().asset_groups
         self.network_data_asset_info = network_data_asset_info
         self.research_metrics = {
-            'ThermoToMarketCap': self.thermo_to_market_cap
+            'ThermoToMarketCap': self.thermo_to_market_cap,
+            'ThermoToRealizedCap': self.thermo_to_realized_cap,
+            'CostPerByte': self.cost_per_byte,
+            'FeeRevPctToMarketCap': self.fee_revenue_percentate_to_market_cap,
+            'TxToTfrCnt': self.transaction_to_transfers,
         }
-        self.metric_prerequisites = {
-            'ThermoToMarketCap': ['RevAllTimeUSD', 'CapMrktCurUSD']
+        self.research_metric_prerequisites = {
+            'ThermoToMarketCap': ['RevAllTimeUSD', 'CapMrktCurUSD'],
+            'ThermoToRealizedCap': ['RevAllTimeUSD', 'CapRealUSD'],
+            'CostPerByte': ['BlkSizeByte', 'FeeTotUSD'],
+            'FeeRevPctToMarketCap': ['FeeRevPct', 'CapMrktCurUSD'],
+            'TxToTfrCnt': ['TxCnt', 'TxTfrCnt'],
+            
         }
 
     def thermo_to_market_cap(self, df, asset):
@@ -24,20 +34,51 @@ class ResearchMetrics(tabc):
         df[new_column_name] = df[f'{asset}.RevAllTimeUSD'] / df[f'{asset}.CapMrktCurUSD']
         return df
 
-    def check_prerequisities(self, asset):
-        prereqs = self.metric_prerequisites[self.metric_name]
+    def thermo_to_realized_cap(self, df, asset):
+        new_column_name = f'{asset}.ThermoToRealizedCap'
+        df[new_column_name] = df[f'{asset}.RevAllTimeUSD'] / df[f'{asset}.CapRealUSD']
+        return df
+
+    def cost_per_byte(self, df, asset):
+        new_column_name = f'{asset}.CostPerByte'
+        df[new_column_name] = df[f'{asset}.FeeTotUSD'] / df[f'{asset}.BlkSizeByte']
+        return df
+
+    def fee_revenue_percentate_to_market_cap(self, df, asset):
+        new_column_name = f'{asset}.FeeRevPctToMarketCap'
+        df[new_column_name] = df[f'{asset}.FeeRevPct'] / df[f'{asset}.CapMrktCurUSD']
+        return df
+
+    def transaction_to_transfers(self, df, asset):
+        new_column_name = f'{asset}.TxToTfrCnt'
+        df[new_column_name] = df[f'{asset}.TxCnt'] / df[f'{asset}.TxTfrCnt']
+        return df
+
+    def check_prerequisities(self, asset, research_metric):
+        
+        ### check if asset is an asset group (e.g. tether, stablecoins, etc.)
+        ### if it is, add all of its consituent assets (e.g. usdt_omni, usdt_eth, usdt_trx, etc.) to the list of _assets
+        _assets = []
+        if asset in self.asset_groups.keys():
+            _assets = self.asset_groups[asset]
+        ### if not, set the asset list as the single asset
+        else:
+            _assets = [asset]  
+        prereqs = self.research_metric_prerequisites[research_metric]
         prereqs_flag = True
         for prereq in prereqs:
             if prereqs_flag == False:
                 break
-            if prereq in self.network_data_asset_info[asset]:
-                prereqs_flag = True
-            else:
-                prereqs_flag = False
+            for _asset in _assets:
+                if prereq in self.network_data_asset_info[_asset]:
+                    prereqs_flag = True
+                else:
+                    prereqs_flag = False
         return prereqs_flag
 
     def implement_transformation(self, df):
-        for asset in assets:
-            if self.check_prerequisities(asset) == True:
-                df = self.research_metrics[self.metric_name](df)
+        for asset in self.assets:
+            for research_metric in self.research_metric_names:
+                if self.check_prerequisities(asset, research_metric) == True:
+                    df = self.research_metrics[research_metric](df, asset)
         return df

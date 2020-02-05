@@ -1,4 +1,4 @@
-from .DataLoaderABC import DataLoader as DataLoader
+from .DataLoaderABC import DataLoader
 
 class CMDataGroups(DataLoader):
     def __init__(self):
@@ -84,6 +84,13 @@ class CMDataGroups(DataLoader):
                     'FeeMedUSD',
                     'VelActAdj1yr',
                     'TxTfrValAdjByte'
+            ],
+            'research-metrics': [
+                    'ThermoToMarketCap',
+                    'ThermoToRealizedCap',
+                    'CostPerByte',
+                    'FeeRevPctToMarketCap',
+                    'TxToTfrCnt' 
             ],
             'btc-specific': [
                 'TxOpRetCnt',
