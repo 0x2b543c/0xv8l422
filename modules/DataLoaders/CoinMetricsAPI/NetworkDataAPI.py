@@ -70,25 +70,3 @@ class NetworkDataAPI(DataLoader):
             result = AggregateColumnsByAssets(aggregation_type='sum', asset_group_names=_asset_groups, metrics=metrics).transform(result)
 
         return result
-
-    def get_coinmetrics_realtime_network_data(self, api_key:str, assets:[str], metrics:[str], reference_time:str=None, reference_height:str=None, direction:str='forward', limit:int=100, staging:bool=False):
-        result = pd.DataFrame()
-        for asset in assets:
-            url_prefix = 'staging-' if staging == True else ''
-            url = 'https://{url_prefix}api.coinmetrics.io/v3/assets/{asset}/realtimemetricdata'.format(url_prefix=url_prefix, asset=asset)
-            params = {
-                'metrics': ','.join(metrics),
-                'reference_time': reference_time,
-                'reference_height': reference_height,
-                'direction': direction,
-                'limit': limit
-            }      
-            response = self.call_coinmetrics_api(api_key=api_key, url=url, params=params)
-            if 'error' in list(response.keys()):
-                error_message = response['error']['description']
-                print('Network Data API Error: {} for asset: {}'.format(error_message, asset))
-            df = self.convert_coinmetrics_network_data_JSON_to_df(response)
-            df.set_index('time', inplace=True)
-            df.columns = [asset + '.' + column for column in list(df.columns)]
-            result = self.concat_dataframes(dfs=[result, df])     
-        return result
