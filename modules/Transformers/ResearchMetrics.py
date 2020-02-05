@@ -19,8 +19,10 @@ class ResearchMetrics(tabc):
             'ThermoToMarketCap': ['RevAllTimeUSD', 'CapMrktCurUSD']
         }
 
-    def thermo_to_market_cap(self, df):
-        pass
+    def thermo_to_market_cap(self, df, asset):
+        new_column_name = f'{asset}.ThermoToMarketCap'
+        df[new_column_name] = df[f'{asset}.RevAllTimeUSD'] / df[f'{asset}.CapMrktCurUSD']
+        return df
 
     def check_prerequisities(self, asset):
         prereqs = self.metric_prerequisites[self.metric_name]
