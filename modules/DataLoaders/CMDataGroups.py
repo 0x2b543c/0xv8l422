@@ -89,8 +89,9 @@ class CMDataGroups(DataLoader):
                     'ThermoToMarketCap',
                     'ThermoToRealizedCap',
                     'CostPerByte',
-                    'FeeRevPctToMarketCap',
-                    'TxToTfrCnt' 
+                    'FeesToMarketCap',
+                    'TxToTfrCnt',
+                    'RealizedPrice' 
             ],
             'btc-specific': [
                 'TxOpRetCnt',

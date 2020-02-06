@@ -17,15 +17,17 @@ class ResearchMetrics(tabc):
             'ThermoToMarketCap': self.thermo_to_market_cap,
             'ThermoToRealizedCap': self.thermo_to_realized_cap,
             'CostPerByte': self.cost_per_byte,
-            'FeeRevPctToMarketCap': self.fee_revenue_percentate_to_market_cap,
+            'FeesToMarketCap': self.fees_to_market_cap,
             'TxToTfrCnt': self.transaction_to_transfers,
+            'RealizedPrice': self.realized_price
         }
         self.research_metric_prerequisites = {
             'ThermoToMarketCap': ['RevAllTimeUSD', 'CapMrktCurUSD'],
             'ThermoToRealizedCap': ['RevAllTimeUSD', 'CapRealUSD'],
             'CostPerByte': ['BlkSizeByte', 'FeeTotUSD'],
-            'FeeRevPctToMarketCap': ['FeeRevPct', 'CapMrktCurUSD'],
+            'FeesToMarketCap': ['FeeTotUSD', 'CapMrktCurUSD'],
             'TxToTfrCnt': ['TxCnt', 'TxTfrCnt'],
+            'RealizedPrice': ['CapRealUSD', 'SplyCur'],
             
         }
 
@@ -44,14 +46,19 @@ class ResearchMetrics(tabc):
         df[new_column_name] = df[f'{asset}.FeeTotUSD'] / df[f'{asset}.BlkSizeByte']
         return df
 
-    def fee_revenue_percentate_to_market_cap(self, df, asset):
-        new_column_name = f'{asset}.FeeRevPctToMarketCap'
-        df[new_column_name] = df[f'{asset}.FeeRevPct'] / df[f'{asset}.CapMrktCurUSD']
+    def fees_to_market_cap(self, df, asset):
+        new_column_name = f'{asset}.FeesToMarketCap'
+        df[new_column_name] = df[f'{asset}.FeeTotUSD'] / df[f'{asset}.CapMrktCurUSD']
         return df
 
     def transaction_to_transfers(self, df, asset):
         new_column_name = f'{asset}.TxToTfrCnt'
         df[new_column_name] = df[f'{asset}.TxCnt'] / df[f'{asset}.TxTfrCnt']
+        return df
+
+    def realized_price(self, df, asset):
+        new_column_name = f'{asset}.RealizedPrice'
+        df[new_column_name] = df[f'{asset}.CapRealUSD'] / df[f'{asset}.SplyCur']
         return df
 
     def check_prerequisities(self, asset, research_metric):
